@@ -1,31 +1,15 @@
 package lab.s2jh.tool.builder;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.entity.BaseEntity;
 import lab.s2jh.core.entity.PersistableEntity;
 import lab.s2jh.core.web.json.DateJsonSerializer;
-
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionEntity;
@@ -33,13 +17,14 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * 基本CRUD框架代码生成工具类，直接main方法执行或Maven方式运行工程的pom.xml调用生成代码
@@ -61,7 +46,8 @@ public class SourceCodeBuilder {
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
         scanner.addExcludeFilter(new AnnotationTypeFilter(RevisionEntity.class));
-        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("");
+        // 可以详细设置特定包路径下的实体,为空时则扫描全部包
+        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("ycb.biz");
         for (BeanDefinition beanDefinition : beanDefinitions) {
             debug(" - " + beanDefinition.getBeanClassName());
             entityNames.add(beanDefinition.getBeanClassName());
