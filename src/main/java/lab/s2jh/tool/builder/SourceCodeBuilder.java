@@ -47,7 +47,7 @@ public class SourceCodeBuilder {
         scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
         scanner.addExcludeFilter(new AnnotationTypeFilter(RevisionEntity.class));
         // 可以详细设置特定包路径下的实体,为空时则扫描全部包
-        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("ycb.biz");
+        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("s2jh.biz.shop");
         for (BeanDefinition beanDefinition : beanDefinitions) {
             debug(" - " + beanDefinition.getBeanClassName());
             entityNames.add(beanDefinition.getBeanClassName());

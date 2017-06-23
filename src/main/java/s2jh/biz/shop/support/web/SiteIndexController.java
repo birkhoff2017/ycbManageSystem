@@ -1,18 +1,11 @@
 package s2jh.biz.shop.support.web;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-
+import com.google.common.collect.Maps;
 import lab.s2jh.core.exception.ServiceException;
 import lab.s2jh.core.service.BaseService;
+import lab.s2jh.core.util.HttpClientUtils;
 import lab.s2jh.core.util.ImageUtils;
+import lab.s2jh.core.util.WXPayUtil;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.filter.WebAppContextInitFilter;
 import lab.s2jh.core.web.util.ServletUtils;
@@ -22,8 +15,9 @@ import lab.s2jh.module.auth.entity.User.AuthTypeEnum;
 import lab.s2jh.module.auth.service.UserService;
 import lab.s2jh.module.sys.service.SmsVerifyCodeService;
 import lab.s2jh.support.service.DynamicConfigService;
-
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.DocumentException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +29,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import s2jh.biz.shop.entity.SiteUser;
 import s2jh.biz.shop.service.SiteUserService;
 
-import com.google.common.collect.Maps;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/w")
@@ -77,7 +80,7 @@ public class SiteIndexController extends BaseController<SiteUser, Long> {
     @RequestMapping(value = "/password/reset", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult passwordResetSmsValidate(HttpServletRequest request, SiteUser entity, Model model, @RequestParam("mobile") String mobile,
-            @RequestParam("smsCode") String smsCode, @RequestParam(value = "newpasswd", required = false) String newpasswd) {
+                                                    @RequestParam("smsCode") String smsCode, @RequestParam(value = "newpasswd", required = false) String newpasswd) {
         if (smsVerifyCodeService.verifySmsCode(request, mobile, smsCode)) {
             User user = userService.findByAuthTypeAndAuthUid(AuthTypeEnum.SYS, mobile);
             if (user == null) {
@@ -138,9 +141,9 @@ public class SiteIndexController extends BaseController<SiteUser, Long> {
     @RequestMapping(value = "/image/crop", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult imageCrop(HttpServletRequest request, @RequestParam("bigImage") String bigImage,
-            @RequestParam(value = "x", required = false) Integer x, @RequestParam(value = "y", required = false) Integer y,
-            @RequestParam(value = "w", required = false) Integer w, @RequestParam(value = "h", required = false) Integer h,
-            @RequestParam(value = "size", required = false) Integer size) throws IOException {
+                                     @RequestParam(value = "x", required = false) Integer x, @RequestParam(value = "y", required = false) Integer y,
+                                     @RequestParam(value = "w", required = false) Integer w, @RequestParam(value = "h", required = false) Integer h,
+                                     @RequestParam(value = "size", required = false) Integer size) throws IOException {
         try {
             String rootDir = WebAppContextInitFilter.getInitedWebContextRealPath();
             String bigImagePath = rootDir + bigImage;
@@ -201,5 +204,108 @@ public class SiteIndexController extends BaseController<SiteUser, Long> {
             throw new ServiceException("Upload file error", e);
         }
         return OperationResult.buildFailureResult("文件处理失败");
+    }
+
+    // 根据用户code获取用户openid和session_key
+    @RequestMapping(value = "/getUserOpenId", method = RequestMethod.GET)
+    @ResponseBody
+    public String getUserOpenId(@RequestParam String code) {
+//        String param = "appid=wx66b477313e0c6dad&secret=a5affc5f337a86880a29a09ca62b56ae&js_code" + code + "&grant_type=authorization_code";
+        Map<String, Object> param = new HashedMap();
+        param.put("appid", "wx66b477313e0c6dad");
+        param.put("secret", "a5affc5f337a86880a29a09ca62b56ae");
+        param.put("js_code", code);
+        param.put("grant_type", "authorization_code");
+        return HttpClientUtils.doGet("https://api.weixin.qq.com/sns/jscode2session", param);
+    }
+
+    // 用户支付
+    @RequestMapping(value = "/payment", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> payment(@RequestParam String openid) throws UnsupportedEncodingException {
+        Map reqMap = new HashedMap();
+        reqMap.put("appid", "wx66b477313e0c6dad");//小程序id
+        reqMap.put("mch_id", "1230000109");//商户号
+        reqMap.put("nonce_str", WXPayUtil.getNonce_str());
+        reqMap.put("body", new String("body".getBytes("UTF-8")));
+        reqMap.put("openid", openid);
+        reqMap.put("out_trade_no", "1111");//订单号
+        reqMap.put("total_fee", 1); //订单总金额，单位为分
+        reqMap.put("spbill_create_ip", "192.168.0.1"); //用户端ip
+        reqMap.put("notify_url", "192.168.0.1"); //通知地址
+        reqMap.put("trade_type", "JSAPI"); //trade_type=JSAPI时（即公众号支付），此参数必传，此参数为微信用户在商户对应appid下的唯一标识
+        String reqStr = WXPayUtil.map2Xml(reqMap);
+        String resultXml = HttpClientUtils.doPost("https://api.mch.weixin.qq.com/pay/unifiedorder", reqStr);
+
+        //解析微信返回串 如果状态成功 则返回给前端
+        //成功
+        Map<String, Object> resultMap = new TreeMap<>(
+                new Comparator<String>() {
+                    public int compare(String obj1, String obj2) {
+                        // 升序排序
+                        return obj1.compareTo(obj2);
+                    }
+                });
+        resultMap.put("appId", System.getenv("appid"));
+        resultMap.put("nonceStr", WXPayUtil.getNonceStr(resultXml));//解析随机字符串
+        resultMap.put("package", "prepay_id=" + WXPayUtil.getPrepayId(resultXml));
+        resultMap.put("signType", "MD5");
+        resultMap.put("timeStamp", String.valueOf((System.currentTimeMillis() / 1000)));//时间戳
+        String paySign = WXPayUtil.getSign(resultMap);
+        resultMap.put("paySign", paySign);
+        return resultMap;
+    }
+
+    //获取支付信息
+    @RequestMapping("/getPayInformation")
+    public static Map<String, Object> getPayInformation(@RequestParam("orderId") String orderId
+    ) throws UnsupportedEncodingException, DocumentException {
+        Map<String, Object> reqMap = new TreeMap<String, Object>(
+                new Comparator<String>() {
+                    public int compare(String obj1, String obj2) {
+                        // 升序排序
+                        return obj1.compareTo(obj2);
+                    }
+                });
+//        String authDataJson = JSONArray.toJSONString(AVUser.getCurrentUser().get("authData"));
+//        JSONObject jsonObject = JSON.parseObject(authDataJson);
+//        jsonObject.get("lc_weapp");
+//        JSONObject j2 = JSON.parseObject(jsonObject.get("lc_weapp").toString());
+//        String openId = (String) j2.get("openid");
+//        AVQuery<Order> query = AVObject.getQuery(Order.class);
+//        Order order = query.get(orderId);
+        reqMap.put("appid", "");//小程序id
+        reqMap.put("mch_id", "");//商户号
+        reqMap.put("nonce_str", WXPayUtil.getNonce_str());
+        reqMap.put("body", new String("body".getBytes("UTF-8")));
+        reqMap.put("openid", "");
+        reqMap.put("out_trade_no", "");//订单号
+        reqMap.put("total_fee", 1); //订单总金额，单位为分
+        reqMap.put("spbill_create_ip", "192.168.0.1"); //用户端ip
+        reqMap.put("notify_url", System.getenv("notify_url")); //通知地址
+        reqMap.put("trade_type", System.getenv("trade_type")); //trade_type=JSAPI时（即公众号支付），此参数必传，此参数为微信用户在商户对应appid下的唯一标识
+        String reqStr = WXPayUtil.map2Xml(reqMap);
+        String resultXml = HttpClientUtils.doPost("", reqMap);
+        System.out.println("微信请求返回:" + resultXml);
+        //解析微信返回串 如果状态成功 则返回给前端
+        if (WXPayUtil.getReturnCode(resultXml) != null && WXPayUtil.getReturnCode(resultXml).equals("SUCCESS")) {
+            //成功
+            Map<String, Object> resultMap = new TreeMap<>(
+                    new Comparator<String>() {
+                        public int compare(String obj1, String obj2) {
+                            // 升序排序
+                            return obj1.compareTo(obj2);
+                        }
+                    });
+            resultMap.put("appId", System.getenv("appid"));
+            resultMap.put("nonceStr", WXPayUtil.getNonceStr(resultXml));//解析随机字符串
+            resultMap.put("package", "prepay_id=" + WXPayUtil.getPrepayId(resultXml));
+            resultMap.put("signType", "MD5");
+            resultMap.put("timeStamp", String.valueOf((System.currentTimeMillis() / 1000)));//时间戳
+            String paySign = WXPayUtil.getSign(resultMap);
+            resultMap.put("paySign", paySign);
+            return resultMap;
+        }
+        return reqMap;
     }
 }
