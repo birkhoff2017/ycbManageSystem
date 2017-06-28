@@ -1,4 +1,4 @@
-package s2jh.biz.shop.support.constant;
+package s2jh.biz.constant;
 
 import lab.s2jh.core.annotation.MetaData;
 
