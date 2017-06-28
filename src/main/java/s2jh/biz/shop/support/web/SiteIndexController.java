@@ -5,6 +5,7 @@ import lab.s2jh.core.exception.ServiceException;
 import lab.s2jh.core.service.BaseService;
 import lab.s2jh.core.util.HttpClientUtils;
 import lab.s2jh.core.util.ImageUtils;
+import lab.s2jh.core.util.JsonUtils;
 import lab.s2jh.core.util.WXPayUtil;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.filter.WebAppContextInitFilter;
@@ -39,10 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/w")
@@ -307,5 +305,29 @@ public class SiteIndexController extends BaseController<SiteUser, Long> {
             return resultMap;
         }
         return reqMap;
+    }
+
+    // 小程序接口测试接口
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    @ResponseBody
+    public String getTest() {
+        Map<String, Object> shopsMap = new HashedMap();
+        List<Map> shops = new ArrayList<>();
+        Map<String, Object> shop = new HashedMap();
+        shop.put("id", "123");
+        shop.put("name","商铺11111");
+        shop.put("address", "朝阳");
+        shop.put("longitude", "100.242081");
+        shop.put("latitude", "26.874501");
+        Map<String, Object> shop1 = new HashedMap();
+        shop1.put("id", "12345");
+        shop1.put("name","商铺22222");
+        shop1.put("address", "朝阳1");
+        shop1.put("longitude", "100.242081");
+        shop1.put("latitude", "26.874501");
+        shops.add(shop);
+        shops.add(shop1);
+        shopsMap.put("shops", shops);
+        return JsonUtils.writeValueAsString(shopsMap);
     }
 }

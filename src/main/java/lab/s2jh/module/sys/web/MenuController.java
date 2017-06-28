@@ -1,11 +1,9 @@
 package lab.s2jh.module.sys.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lab.s2jh.core.annotation.MenuData;
+import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.pagination.GroupPropertyFilter;
 import lab.s2jh.core.pagination.PropertyFilter;
 import lab.s2jh.core.pagination.PropertyFilter.MatchType;
@@ -17,7 +15,6 @@ import lab.s2jh.core.web.view.OperationResult;
 import lab.s2jh.module.sys.entity.Menu;
 import lab.s2jh.module.sys.service.MenuService;
 import lab.s2jh.module.sys.vo.NavMenuVO;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -26,14 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin/sys/menu")
@@ -99,6 +93,13 @@ public class MenuController extends BaseController<Menu, Long> {
             items.add(item);
         }
         return items;
+    }
+
+    @MetaData("删除")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public OperationResult doDelete(@ModelAttribute("entity") Menu entity) {
+        return super.delete(entity.getId());
     }
 
     @RequiresUser
