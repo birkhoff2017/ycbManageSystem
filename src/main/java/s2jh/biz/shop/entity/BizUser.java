@@ -31,7 +31,7 @@ public class BizUser extends BaseNativeEntity {
 
     @MetaData("用户所属平台")
     @Column(name = "platform", nullable = false)
-    private int platform = 0;
+    private Integer platform = 0;
 
     @MetaData("账户余额")
     @Column(name = "usablemoney", precision = 8, scale = 2, nullable = false)

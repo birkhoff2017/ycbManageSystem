@@ -11,3 +11,4 @@
 ### Tomcat cache 警告问题：在tomcat的/conf/context.xml中的Context中添加<Resources cachingAllowed="true" cacheMaxSize="102400"/>
 ### 创建Bean尽量在原有包路径下创建，新创建包要配置很多地方，否则Hibernate的hbm2ddl功能不能正确在数据库中创建表
 ### 菜单在Controller中的index方法上实现注解 @MenuData("业务模块:客户管理")@RequiresPermissions("业务模块:客户管理")即可
+### /pub/data!dictDatas.json

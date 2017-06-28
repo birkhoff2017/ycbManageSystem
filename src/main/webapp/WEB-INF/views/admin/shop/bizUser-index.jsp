@@ -45,7 +45,6 @@
 		        }, {
 		            label : '用户openid',
 		            name : 'openid',
-		            width : 255,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
@@ -63,7 +62,17 @@
 		            name : 'refund',
 		            formatter: 'number',
 		            editable: true                                                                   
-		        } ],
+		        }, {
+					label : '用户所属平台',
+					name : 'platform',
+					stype: 'select',
+					searchoptions: {
+						//value: Util.getCacheEnumsByType("Platform")
+						//value: Util.getCacheDictDatasByType("Platform")
+						value: Biz.getPlatform()
+					},
+					editable: true
+				}  ],
 		        editurl : WEB_ROOT + '/admin//shop/biz-user/edit',
 		        editrulesurl : WEB_ROOT + '/admin/util/validate?clazz=${clazz}',
 		        delurl : WEB_ROOT + '/admin/shop/biz-user/delete',
