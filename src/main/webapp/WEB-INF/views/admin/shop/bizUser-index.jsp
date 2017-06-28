@@ -67,9 +67,7 @@
 					name : 'platform',
 					stype: 'select',
 					searchoptions: {
-						//value: Util.getCacheEnumsByType("Platform")
-						//value: Util.getCacheDictDatasByType("Platform")
-						value: Biz.getPlatform()
+						value: Util.getCacheDictDatasByType("Platform")
 					},
 					editable: true
 				}  ],

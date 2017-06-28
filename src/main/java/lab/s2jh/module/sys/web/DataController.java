@@ -9,6 +9,7 @@ import lab.s2jh.module.sys.service.DataDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class DataController {
 
     @MetaData("数据字典数据集合")
     @RequestMapping(value = "/dictDatas")
+    @ResponseBody
     public String dictDatas() {
         ArrayList datas = Lists.newArrayList();
         List dataDicts = this.dataDictService.findAllCached();
