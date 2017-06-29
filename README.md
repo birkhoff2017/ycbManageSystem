@@ -8,7 +8,12 @@
     工作流引擎 - 基于Acitiviti的工作流引擎以支持业务流程处理
     
 ## 特殊事项
-### Tomcat cache 警告问题：在tomcat的/conf/context.xml中的Context中添加<Resources cachingAllowed="true" cacheMaxSize="102400"/>
-### 创建Bean尽量在原有包路径下创建，新创建包要配置很多地方，否则Hibernate的hbm2ddl功能不能正确在数据库中创建表
-### 菜单在Controller中的index方法上实现注解 @MenuData("业务模块:客户管理")@RequiresPermissions("业务模块:客户管理")即可
-### /pub/data!dictDatas.json
+### Tomcat cache 警告问题：
+在tomcat的/conf/context.xml中的Context中添加<Resources cachingAllowed="true" cacheMaxSize="102400"/>
+### 无法自动创建表问题：
+创建Bean尽量在原有包路径下创建，新创建包要配置很多地方，否则Hibernate的hbm2ddl功能不能正确在数据库中创建表
+### 菜单目录问题：
+菜单在Controller中的index方法上实现注解 @MenuData("业务模块:客户管理")@RequiresPermissions("业务模块:客户管理")即可
+### 数据字典问题
+将util.js 的getCacheDictDatasByType 方法url修正 /pub/data!dictDatas.json-> /pub/data/dictDatas
+同时在controller中添加接口
