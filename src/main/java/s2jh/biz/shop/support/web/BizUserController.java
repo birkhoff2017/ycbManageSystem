@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lab.s2jh.core.annotation.MenuData;
 import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.service.BaseService;
-import lab.s2jh.core.util.JsonUtils;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.json.JsonViews;
 import lab.s2jh.core.web.view.OperationResult;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import s2jh.biz.constant.BizDictCategoryEnum;
 import s2jh.biz.shop.entity.BizUser;
 import s2jh.biz.shop.service.BizUserService;
 
@@ -82,10 +80,4 @@ public class BizUserController extends BaseController<BizUser, Long> {
         return super.delete(ids);
     }
 
-    @MetaData("客户所属平台")
-    @RequestMapping(value = "/getPlatform", method = RequestMethod.GET)
-    @ResponseBody
-    public String getPlatform() {
-        return JsonUtils.writeValueAsString(dataDictService.findMapDataByPrimaryKey(BizDictCategoryEnum.Platform.name()));
-    }
 }

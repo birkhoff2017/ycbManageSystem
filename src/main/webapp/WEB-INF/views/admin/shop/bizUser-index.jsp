@@ -65,7 +65,7 @@
 		        }, {
 					label : '用户所属平台',
 					name : 'platform',
-					stype: 'select',
+					formatter: 'select',
 					searchoptions: {
 						value: Util.getCacheDictDatasByType("Platform")
 					},

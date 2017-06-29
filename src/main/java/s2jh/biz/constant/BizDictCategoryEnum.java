@@ -3,6 +3,7 @@ package s2jh.biz.constant;
 import lab.s2jh.core.annotation.MetaData;
 
 /**
+ * TO delete cause DataController has get dict data
  * Created by zhuhui on 17-6-27.
  */
 public enum BizDictCategoryEnum {
