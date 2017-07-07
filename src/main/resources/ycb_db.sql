@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS `mcs_user`;
 CREATE TABLE IF NOT EXISTS `mcs_user` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `openid` varchar(50) NOT NULL comment '用户openid(微信,支付宝等其他平台)',
-  `platform` tinyint(1) unsigned NOT NULL DEFAULT '0' comment '0:微信, 1:支付宝',
+  `platform` tinyint(1) unsigned NOT NULL DEFAULT '0' comment '0:微信, 1:支付宝, 2:芝麻信用',
   `usablemoney` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' comment '账户余额',
   `deposit` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' comment '押金',
   `refund` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' comment '待退款数目',
@@ -62,12 +62,15 @@ CREATE TABLE IF NOT EXISTS `mcs_tradelog` (
   `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
   `customer` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
   `platform` tinyint(1) unsigned NOT NULL DEFAULT '0' comment '0:微信, 1:支付宝',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态 cfg.inc.php 定义 1 已支付 2 借出 3 归还 4 提现 5 第一次确认 6 提醒归还 7 手动退押金 10 充电头/线借出 84 异常断电 85 机械手报警 86 电池卡住 87 四轴无响应 88 机器工作中 89 主控无确认 90 主控无应答 95 充电头槽口有问题 96 超时自动退款 97 借出失败 98 租金已扣完 100 管理员待支付 101 管理员直接支付 102 异常支付',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态 cfg.inc.php 定义 1 已支付 2 借出 3 归还 4 提现 ' ||
+   '5 第一次确认 6 提醒归还 7 手动退押金 10 充电头/线借出 64网络确认无应答 65上一单未完成 66同步时间失败 67解锁5V失败 ' ||
+   '68 电机故障 69红外异常 70无符合电池可借 84 异常断电 85 机械手报警 86 电池卡住 87 四轴无响应 88 机器工作中 89 主控无确认' ||
+   '90 主控无应答 92租金已扣完（未归还） 93管理员已手动退款（归还失败） 94归还异常（系统已退款） 95 充电头槽口有问题 96 超时自动退款 97 借出失败 98 租金已扣完 100 管理员待支付 101 管理员直接支付 102 异常支付',
   `lastupdate` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `battery_id` bigint(11) unsigned NOT NULL DEFAULT '0' COMMENT '电池ID',
   `shop_type` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '业态',
   `seller_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '代理id',
-  `cable` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '线类型 默认是二合一的线类型  3:typec',
+  `cable` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '线类型 默认是2：二合一的线类型  3:typec',
   `sceneid` int(32) unsigned NOT NULL DEFAULT '0' COMMENT '借出该电池的充电站',
   `return_station` int(32) unsigned NOT NULL DEFAULT '0' COMMENT '归还的充电站',
   `borrow_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '借出的时间',
