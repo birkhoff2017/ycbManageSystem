@@ -250,6 +250,11 @@
             <artifactId>hibernate-ehcache</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
+        <!--<dependency>
+            <groupId>com.github.hibernate-redis</groupId>
+            <artifactId>hibernate-redis</artifactId>
+            <version>1.6.4</version>
+        </dependency>-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>

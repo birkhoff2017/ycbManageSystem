@@ -1,4 +1,4 @@
-package s2jh.biz.shop.entity;
+package s2jh.biz.bizUser.entity;
 
 import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.entity.BaseNativeEntity;
@@ -19,18 +19,24 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 @Access(AccessType.FIELD)
 @Entity
-@Table(name = "mcs_user")
+@Table(name = "ycb_mcs_user")
 @MetaData(value = "客户")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BizUser extends BaseNativeEntity {
     private static final long serialVersionUID = 4231028228537930521L;
 
+    // 不需要
+    // @MetaData("uid")
+    // @Column(name = "uid", nullable = false, unique = true)
+    // private String uid;
+
     @MetaData("用户openid")
     @Column(name = "openid", nullable = false, unique = true)
     private String openid;
 
+    //"0:微信 1:支付宝 2:芝麻信用"
     @MetaData("用户所属平台")
-    @Column(name = "platform", nullable = false, columnDefinition = "0:微信 1:支付宝")
+    @Column(name = "platform", nullable = false)
     private Integer platform = 0;
 
     @MetaData("账户余额")
@@ -47,6 +53,6 @@ public class BizUser extends BaseNativeEntity {
 
     // 1:取消 0:未取消
     @MetaData("是否取消关注")
-    @Column(name = "unsubscribe", nullable = false)
+    @Column(name = "unsubscribe")
     private boolean unsubscribe;
 }

@@ -40,14 +40,14 @@
 	</servlet-mapping>
 
 	<!-- JasperReport报表图片 -->
-	<servlet>
+<!--	<servlet>
 		<servlet-name>imageServlet</servlet-name>
 		<servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>imageServlet</servlet-name>
 		<url-pattern>/pub/jasper/images.servlet</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<servlet>
 		<servlet-name>DruidStatView</servlet-name>

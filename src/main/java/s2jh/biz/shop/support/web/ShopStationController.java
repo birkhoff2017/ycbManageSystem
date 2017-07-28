@@ -7,77 +7,72 @@ import lab.s2jh.core.service.BaseService;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.json.JsonViews;
 import lab.s2jh.core.web.view.OperationResult;
-import lab.s2jh.module.sys.service.DataDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import s2jh.biz.shop.entity.BizUser;
-import s2jh.biz.shop.service.BizUserService;
+import s2jh.biz.shop.entity.ShopStation;
+import s2jh.biz.shop.service.ShopStationService;
 
 import javax.servlet.http.HttpServletRequest;
 
-@MetaData("客户管理")
+@MetaData("商铺站点管理")
 @Controller
-@RequestMapping(value = "/admin/shop/biz-user")
-public class BizUserController extends BaseController<BizUser, Long> {
+@RequestMapping(value = "/admin/shop/shop-station")
+public class ShopStationController extends BaseController<ShopStation,Long> {
 
     @Autowired
-    private BizUserService bizUserService;
-
-    @Autowired
-    private DataDictService dataDictService;
+    private ShopStationService shopStationService;
 
     @Override
-    protected BaseService<BizUser, Long> getEntityService() {
-        return bizUserService;
+    protected BaseService<ShopStation, Long> getEntityService() {
+        return shopStationService;
     }
-
+    
     @ModelAttribute
     public void prepareModel(HttpServletRequest request, Model model, @RequestParam(value = "id", required = false) Long id) {
         super.initPrepareModel(request, model, id);
     }
-
-    @MenuData("业务模块:客户管理")
-    @RequiresPermissions("业务模块:客户管理")
+    
+    @MenuData("业务模块:商铺站点")
+    @RequiresPermissions("商铺站点")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
-        return "admin/shop/bizUser-index";
-    }
-
-    @RequiresPermissions("客户管理")
+        return "admin/shopStation/shopStation-index";
+    }   
+    
+    @RequiresPermissions("商铺站点")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
-    public Page<BizUser> findByPage(HttpServletRequest request) {
-        return super.findByPage(BizUser.class, request);
+    public Page<ShopStation> findByPage(HttpServletRequest request) {
+        return super.findByPage(ShopStation.class, request);
     }
-
+    
     @RequestMapping(value = "/edit-tabs", method = RequestMethod.GET)
     public String editTabs(HttpServletRequest request) {
-        return "admin/shop/bizUser-inputTabs";
+        return "admin/shopStation/shopStation-inputTabs";
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("商铺站点")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
-        return "admin/shop/bizUser-inputBasic";
+        return "admin/shopStation/shopStation-inputBasic";
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("商铺站点")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
-    public OperationResult editSave(@ModelAttribute("entity") BizUser entity, Model model) {
+    public OperationResult editSave(@ModelAttribute("entity") ShopStation entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("商铺站点")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {
         return super.delete(ids);
     }
-
 }
