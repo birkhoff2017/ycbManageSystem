@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 @MetaData("客户管理")
 @Controller
-@RequestMapping(value = "/admin/biz-user")
+@RequestMapping(value = "/admin/shop/biz-user")
 public class BizUserController extends BaseController<BizUser, Long> {
 
     @Autowired

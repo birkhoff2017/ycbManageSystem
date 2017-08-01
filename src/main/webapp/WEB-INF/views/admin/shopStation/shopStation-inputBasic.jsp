@@ -26,7 +26,7 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
-						<label class="control-label">关联店铺</label>
+						<label class="control-label">关联商铺</label>
 						<div class="controls">
 			                <form:input path="shop" class="form-control"/>
 						</div>
@@ -46,7 +46,7 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
-						<label class="control-label">关联店铺</label>
+						<label class="control-label">设备码</label>
 						<div class="controls">
 			                <form:input path="lbsid" class="form-control"/>
 						</div>
@@ -56,7 +56,7 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
-						<label class="control-label">店铺</label>
+						<label class="control-label">商铺名</label>
 						<div class="controls">
 			                <form:input path="title" class="form-control"/>
 						</div>
@@ -68,7 +68,7 @@
 					<div class="form-group">
 						<label class="control-label">设备具体摆放位置</label>
 						<div class="controls">
-			                <form:input path="desc" class="form-control"/>
+			                <form:input path="position" class="form-control"/>
 						</div>
 					</div>
 	            </div>

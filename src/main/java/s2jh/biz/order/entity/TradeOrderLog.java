@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import s2jh.biz.bizUser.entity.BizUser;
 import s2jh.biz.shop.entity.Shop;
 import s2jh.biz.shop.entity.ShopStation;
+import s2jh.biz.station.entity.Station;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ import java.sql.Date;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_tradelog")
-@MetaData(value = "订单表")
+@MetaData(value = "业务模块:订单表")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class TradeOrderLog extends BaseNativeEntity {
 
@@ -63,11 +64,13 @@ public class TradeOrderLog extends BaseNativeEntity {
     private Date returnTime;
 
     @MetaData("借出商铺id")
-    @Column(name = "borrow_shop_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "borrow_shop_id")
     private Shop borrowShop;
 
     @MetaData("归还商铺id")
-    @Column(name = "return_shop_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_shop_id")
     private Shop returnShop;
 
     @MetaData("借出商铺名")
@@ -79,10 +82,22 @@ public class TradeOrderLog extends BaseNativeEntity {
     private String returnShopName;
 
     @MetaData("借出设备id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "borrow_station_id")
+    private Station borrowStation;
+
+    @MetaData("归还设备id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_station_id")
+    private Station returnStation;
+
+    @MetaData("借出商铺站点id")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "borrow_shop_station_id")
     private ShopStation borrowShopStation;
 
-    @MetaData("归还设备id")
+    @MetaData("归还商铺站点id")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "return_shop_station_id")
     private ShopStation returnShopStation;
 

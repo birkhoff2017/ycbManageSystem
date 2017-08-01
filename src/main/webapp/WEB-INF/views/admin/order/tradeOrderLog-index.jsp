@@ -62,12 +62,18 @@
 		        }, {
 		            label : '平台',
 		            name : 'platform',
-		            formatter: 'integer',
+                    formatter: 'select',
+                    searchoptions: {
+                        value: Util.getCacheDictDatasByType("Platform")
+                    },
 		            editable: true                                                                   
 		        }, {
 		            label : '状态',
 		            name : 'status',
-		            formatter: 'integer',
+                    formatter: 'select',
+                    searchoptions: {
+                        value: Util.getCacheDictDatasByType("Trade_Order_Status")
+                    },
 		            editable: true                                                                   
 		        }, {
 		            label : '借出商铺id',
@@ -95,12 +101,24 @@
 		            editable: true                                                                   
 		        }, {
 		            label : '借出设备id',
-		            name : 'borrowShopStation',
+		            name : 'borrowStation',
 		            width : 200,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '归还设备id',
+		            name : 'returnStation',
+		            width : 200,
+		            align : 'center',
+		            editable: true                                                                   
+		        }, {
+		            label : '借出商铺站点id',
+		            name : 'borrowShopStation',
+		            width : 200,
+		            align : 'center',
+		            editable: true                                                                   
+		        }, {
+		            label : '归还商铺站点id',
 		            name : 'returnShopStation',
 		            width : 200,
 		            align : 'center',
@@ -135,6 +153,10 @@
 		        } ],
 		        postData: {
 		           "search['FETCH_bizUser']" : "INNER",
+		           "search['FETCH_borrowShop']" : "LEFT",
+		           "search['FETCH_returnShop']" : "LEFT",
+		           "search['FETCH_borrowStation']" : "LEFT",
+		           "search['FETCH_returnStation']" : "LEFT",
 		           "search['FETCH_borrowShopStation']" : "LEFT",
 		           "search['FETCH_returnShopStation']" : "LEFT"
 		        },

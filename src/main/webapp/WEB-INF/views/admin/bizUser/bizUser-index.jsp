@@ -51,7 +51,10 @@
 		        }, {
 		            label : '用户所属平台',
 		            name : 'platform',
-		            formatter: 'integer',
+                    formatter: 'select',
+                    searchoptions: {
+                        value: Util.getCacheDictDatasByType("Platform")
+                    },
 		            editable: true                                                                   
 		        }, {
 		            label : '账户余额',
