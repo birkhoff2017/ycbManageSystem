@@ -44,15 +44,13 @@
 		            hidden : true                          
 		        }, {
 		            label : '关联商铺',
-		            name : 'shop',
-		            width : 200,
-		            align : 'center',
+		            name : 'shop.name',
+		            index : 'shop',
 		            editable: true                                                                   
 		        }, {
 		            label : '关联设备',
-		            name : 'station',
-		            width : 200,
-		            align : 'center',
+		            name : 'station.title',
+		            index : 'station',
 		            editable: true                                                                   
 		        }, {
 		            label : '设备码',
@@ -95,9 +93,8 @@
 		            editable: true                                                                   
 		        }, {
 		            label : '销售',
-		            name : 'admin',
-		            width : 200,
-		            align : 'center',
+		            name : 'admin.display',
+		            index : 'admin',
 		            editable: true                                                                   
 		        }, {
 		            label : '设备状态',

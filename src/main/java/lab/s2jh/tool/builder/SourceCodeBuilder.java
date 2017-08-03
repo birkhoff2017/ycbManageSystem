@@ -202,7 +202,7 @@ public class SourceCodeBuilder {
                     if (StringUtils.isBlank(entityCodeField.getFieldType())) {
                         entityCodeField.setFieldType(fieldType.getSimpleName());
                     } else {
-                        entityCodeField.setFieldType(String.class.getSimpleName());
+//                        entityCodeField.setFieldType(String.class.getSimpleName());
                     }
                     entityCodeField.setFieldName(field.getName());
                     entityCodeField.setTitle(field.getName());

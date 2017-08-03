@@ -28,7 +28,10 @@
 					<div class="form-group">
 						<label class="control-label">关联商铺</label>
 						<div class="controls">
-			                <form:input path="shop" class="form-control"/>
+			                <form:hidden path="shop.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/shop/shop/list" data-display="${shop.id}"
+								data-query="search['CN_shop.name']"/>
+			                <form:input path="shop.name" class="form-control"/>
 						</div>
 					</div>
 	            </div>
@@ -38,7 +41,10 @@
 					<div class="form-group">
 						<label class="control-label">关联设备</label>
 						<div class="controls">
-			                <form:input path="station" class="form-control"/>
+			                <form:hidden path="station.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/station/station/list" data-display="${station.title}"
+								data-query="search['CN_station.title']" />
+			                <form:input path="station.title" class="form-control"/>
 						</div>
 					</div>
 	            </div>
@@ -118,7 +124,10 @@
 					<div class="form-group">
 						<label class="control-label">销售</label>
 						<div class="controls">
-			                <form:input path="admin" class="form-control"/>
+			                <form:hidden path="admin.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/auth/user/list" data-display="${admin.display}"
+								data-query="search['CN_admin.display']" />
+			                <form:input path="admin.display" class="form-control"/>
 						</div>
 					</div>
 	            </div>

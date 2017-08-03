@@ -40,7 +40,7 @@ public class ShopStation extends BaseNativeEntity {
     @Column(name = "lbsid")
     private Long lbsid;
 
-    @MetaData("商铺名")
+    @MetaData("商铺站点名")
     @Column(name = "title")
     private String title;
 

@@ -60,7 +60,7 @@ public class SourceCodeFrameworkBuilder {
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
         scanner.addExcludeFilter(new AnnotationTypeFilter(RevisionEntity.class));
-        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("");
+        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("s2jh.biz");
         for (BeanDefinition beanDefinition : beanDefinitions) {
             debug(" - " + beanDefinition.getBeanClassName());
             entityNames.add(beanDefinition.getBeanClassName());
