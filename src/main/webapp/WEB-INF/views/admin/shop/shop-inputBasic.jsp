@@ -26,7 +26,7 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
-						<label class="control-label">name</label>
+						<label class="control-label">商铺名</label>
 						<div class="controls">
 			                <form:input path="name" class="form-control"/>
 						</div>

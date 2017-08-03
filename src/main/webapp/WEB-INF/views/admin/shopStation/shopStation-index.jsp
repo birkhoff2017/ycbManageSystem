@@ -14,7 +14,7 @@
 				data-grid-search="#grid-shop-shop-station-index">
 				<div class="form-group">
 					<div class="controls controls-clearfix">
-						<input type="text" name="search['CN_title_OR_desc_OR_address']" class="form-control input-xlarge" placeholder="店铺 , 设备具体摆放位置 , 地址...">
+						<input type="text" name="search['CN_title_OR_position_OR_address']" class="form-control input-xlarge" placeholder="商铺名 , 设备具体摆放位置 , 地址...">
 					</div>
 				</div>
 				<div class="form-group search-group-btn">
@@ -43,7 +43,7 @@
 		            name : 'id',
 		            hidden : true                          
 		        }, {
-		            label : '关联店铺',
+		            label : '关联商铺',
 		            name : 'shop',
 		            width : 200,
 		            align : 'center',
@@ -55,18 +55,18 @@
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
-		            label : '关联店铺',
+		            label : '设备码',
 		            name : 'lbsid',
 		            editable: true                                                                   
 		        }, {
-		            label : '店铺',
+		            label : '商铺名',
 		            name : 'title',
 		            width : 255,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '设备具体摆放位置',
-		            name : 'desc',
+		            name : 'position',
 		            width : 255,
 		            align : 'center',
 		            editable: true                                                                   

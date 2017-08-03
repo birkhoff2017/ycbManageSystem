@@ -118,7 +118,7 @@
 					<div class="form-group">
 						<label class="control-label">借出设备id</label>
 						<div class="controls">
-			                <form:input path="borrowShopStation" class="form-control"/>
+			                <form:input path="borrowStation" class="form-control"/>
 						</div>
 					</div>
 	            </div>
@@ -127,6 +127,26 @@
 	            <div class="col-md-6">
 					<div class="form-group">
 						<label class="control-label">归还设备id</label>
+						<div class="controls">
+			                <form:input path="returnStation" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">借出商铺站点id</label>
+						<div class="controls">
+			                <form:input path="borrowShopStation" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">归还商铺站点id</label>
 						<div class="controls">
 			                <form:input path="returnShopStation" class="form-control"/>
 						</div>

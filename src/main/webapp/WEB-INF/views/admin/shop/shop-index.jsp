@@ -14,7 +14,7 @@
 				data-grid-search="#grid-shop-shop-index">
 				<div class="form-group">
 					<div class="controls controls-clearfix">
-						<input type="text" name="search['CN_name_OR_province_OR_city']" class="form-control input-xlarge" placeholder="name , 省份 , 城市...">
+						<input type="text" name="search['CN_name_OR_province_OR_city']" class="form-control input-xlarge" placeholder="商铺名 , 省份 , 城市...">
 					</div>
 				</div>
 				<div class="form-group search-group-btn">
@@ -43,7 +43,7 @@
 		            name : 'id',
 		            hidden : true                          
 		        }, {
-		            label : 'name',
+		            label : '商铺名',
 		            name : 'name',
 		            width : 255,
 		            align : 'center',
