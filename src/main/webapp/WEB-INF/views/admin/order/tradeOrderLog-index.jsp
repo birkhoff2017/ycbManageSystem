@@ -51,41 +51,36 @@
 		        }, {
 		            label : '订单金额',
 		            name : 'price',
-		            formatter: 'number',
+		            formatter: 'currency',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '用户',
-		            name : 'bizUser',
-		            width : 200,
-		            align : 'center',
+		            name : 'bizUser.id',
+		            index : 'bizUser',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '平台',
 		            name : 'platform',
-                    formatter: 'select',
-                    searchoptions: {
-                        value: Util.getCacheDictDatasByType("Platform")
-                    },
+		            formatter: 'integer',
 		            editable: true                                                                   
 		        }, {
 		            label : '状态',
 		            name : 'status',
-                    formatter: 'select',
-                    searchoptions: {
-                        value: Util.getCacheDictDatasByType("Trade_Order_Status")
-                    },
+		            formatter: 'integer',
 		            editable: true                                                                   
 		        }, {
 		            label : '借出商铺id',
-		            name : 'borrowShop',
-		            width : 200,
-		            align : 'center',
+		            name : 'borrowShop.id',
+		            index : 'borrowShop',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '归还商铺id',
-		            name : 'returnShop',
-		            width : 200,
-		            align : 'center',
+		            name : 'returnShop.id',
+		            index : 'returnShop',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '借出商铺名',
@@ -101,27 +96,27 @@
 		            editable: true                                                                   
 		        }, {
 		            label : '借出设备id',
-		            name : 'borrowStation',
-		            width : 200,
-		            align : 'center',
+		            name : 'borrowStation.id',
+		            index : 'borrowStation',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '归还设备id',
-		            name : 'returnStation',
-		            width : 200,
-		            align : 'center',
+		            name : 'returnStation.id',
+		            index : 'returnStation',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '借出商铺站点id',
-		            name : 'borrowShopStation',
-		            width : 200,
-		            align : 'center',
+		            name : 'borrowShopStation.id',
+		            index : 'borrowShopStation',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '归还商铺站点id',
-		            name : 'returnShopStation',
-		            width : 200,
-		            align : 'center',
+		            name : 'returnShopStation.id',
+		            index : 'returnShopStation',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '借出时所在城市',
@@ -138,17 +133,20 @@
 		        }, {
 		            label : '已退款金额',
 		            name : 'refunded',
-		            formatter: 'number',
+		            formatter: 'currency',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '租金',
 		            name : 'usefee',
-		            formatter: 'number',
+		            formatter: 'currency',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '已付款',
 		            name : 'paid',
-		            formatter: 'number',
+		            formatter: 'currency',
+                    align : 'center',
 		            editable: true                                                                   
 		        } ],
 		        postData: {
