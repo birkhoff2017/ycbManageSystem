@@ -48,7 +48,10 @@
 					<div class="form-group">
 						<label class="control-label">用户</label>
 						<div class="controls">
-			                <form:input path="bizUser" class="form-control"/>
+			                <form:hidden path="bizUser.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/shop/biz-user/list" data-display="${bizUser.openid}"
+								data-query="search['CN_openid']" />
+			                <form:input path="bizUser.id" class="form-control"/>			                
 						</div>
 					</div>
 	            </div>
@@ -78,7 +81,10 @@
 					<div class="form-group">
 						<label class="control-label">借出商铺id</label>
 						<div class="controls">
-			                <form:input path="borrowShop" class="form-control"/>
+			                <form:hidden path="borrowShop.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/shop/shop/list" data-display="${shop.id}"
+								data-query="search['CN_name']" />
+			                <form:input path="borrowShop.id" class="form-control"/>
 						</div>
 					</div>
 	            </div>
@@ -88,7 +94,10 @@
 					<div class="form-group">
 						<label class="control-label">归还商铺id</label>
 						<div class="controls">
-			                <form:input path="returnShop" class="form-control"/>
+			                <form:hidden path="returnShop.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/shop/shop/list" data-display="${shop.id}"
+								data-query="search['CN_name']" />
+			                <form:input path="returnShop.id" class="form-control"/>			                
 						</div>
 					</div>
 	            </div>
@@ -118,7 +127,10 @@
 					<div class="form-group">
 						<label class="control-label">借出设备id</label>
 						<div class="controls">
-			                <form:input path="borrowStation" class="form-control"/>
+			                <form:hidden path="borrowStation.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/station/station/list" data-display="${borrowStation.id}"
+								data-query="search['CN_title']" />
+			                <form:input path="borrowStation.id" class="form-control"/>			                
 						</div>
 					</div>
 	            </div>
@@ -128,7 +140,10 @@
 					<div class="form-group">
 						<label class="control-label">归还设备id</label>
 						<div class="controls">
-			                <form:input path="returnStation" class="form-control"/>
+			                <form:hidden path="returnStation.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/station/station/list" data-display="${returnStation.id}"
+								data-query="search['CN_title']" />
+			                <form:input path="returnStation.id" class="form-control"/>			                
 						</div>
 					</div>
 	            </div>
@@ -138,7 +153,10 @@
 					<div class="form-group">
 						<label class="control-label">借出商铺站点id</label>
 						<div class="controls">
-			                <form:input path="borrowShopStation" class="form-control"/>
+			                <form:hidden path="borrowShopStation.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/shop/shop-station/list" data-display="${borrowShopStation.id}"
+								data-query="search['CN_title']" />
+			                <form:input path="borrowShopStation.id" class="form-control"/>			                
 						</div>
 					</div>
 	            </div>
@@ -148,7 +166,10 @@
 					<div class="form-group">
 						<label class="control-label">归还商铺站点id</label>
 						<div class="controls">
-			                <form:input path="returnShopStation" class="form-control"/>
+			                <form:hidden path="returnShopStation.id" class="form-control" data-select2-type="remote"
+								data-url="${ctx}/admin/shop/shop-station/list" data-display="${returnShopStation.id}"
+								data-query="search['CN_title']" />
+			                <form:input path="returnShopStation.id" class="form-control"/>			                
 						</div>
 					</div>
 	            </div>

@@ -38,7 +38,7 @@ public class TradeOrderLog extends BaseNativeEntity {
     private String orderid;
 
     @MetaData("订单金额")
-    @Column(name = "price", precision = 8, scale = 2, nullable = false, unique = true)
+    @Column(name = "price", precision = 8, scale = 2)
     private BigDecimal price = BigDecimal.ZERO;
 
     @MetaData("用户")
