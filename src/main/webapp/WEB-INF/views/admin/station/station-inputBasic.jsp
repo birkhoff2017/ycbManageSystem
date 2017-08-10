@@ -36,6 +36,36 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
+						<label class="control-label">心跳周期</label>
+						<div class="controls">
+			                <form:input path="heartCycle" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">通信模块</label>
+						<div class="controls">
+			                <form:input path="route" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">ccid</label>
+						<div class="controls">
+			                <form:input path="ccid" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
 						<label class="control-label">可借数</label>
 						<div class="controls">
 			                <form:input path="usable" class="form-control"/>
@@ -49,6 +79,26 @@
 						<label class="control-label">可还数</label>
 						<div class="controls">
 			                <form:input path="empty" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">总数</label>
+						<div class="controls">
+			                <form:input path="total" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">可用电池</label>
+						<div class="controls">
+			                <form:input path="usableBattery" class="form-control"/>
 						</div>
 					</div>
 	            </div>

@@ -1,5 +1,6 @@
 package s2jh.biz.station.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.entity.BaseNativeEntity;
 import lombok.Getter;
@@ -29,6 +30,18 @@ public class Station extends BaseNativeEntity {
     @Column(name = "mac")
     private String mac;
 
+    @MetaData("心跳周期")
+    @Column(name = "heart_cycle")
+    private Integer heartCycle;
+
+    @MetaData("通信模块")
+    @Column(name = "route")
+    private String route;
+
+    @MetaData("ccid")
+    @Column(name = "ccid")
+    private String ccid;
+
     @MetaData("可借数")
     @Column(name = "usable")
     private Integer usable;
@@ -36,6 +49,14 @@ public class Station extends BaseNativeEntity {
     @MetaData("可还数")
     @Column(name = "empty")
     private Integer empty;
+
+    @MetaData("总数")
+    @Column(name = "total")
+    private Integer total;
+
+    @MetaData("可用电池")
+    @Column(name = "usable_battery")
+    private String usableBattery;
 
     @MetaData("槽位状态")
     @Column(name = "slotstatus")
@@ -65,6 +86,13 @@ public class Station extends BaseNativeEntity {
 
     @MetaData("同步时间")
     @Column(name = "sync_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date syncTime;
+
+    @MetaData("同步时间")
+    @JsonProperty
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_power_off_time")
+    private Date lastPowerOffTime;
 
 }

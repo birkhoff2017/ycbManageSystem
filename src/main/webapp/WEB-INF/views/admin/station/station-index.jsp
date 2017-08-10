@@ -14,7 +14,7 @@
 				data-grid-search="#grid-station-station-index">
 				<div class="form-group">
 					<div class="controls controls-clearfix">
-						<input type="text" name="search['CN_mac_OR_slotstatus_OR_title']" class="form-control input-xlarge" placeholder="Mac地址 , 槽位状态 , 设备名...">
+						<input type="text" name="search['CN_mac_OR_route_OR_ccid']" class="form-control input-xlarge" placeholder="Mac地址 , 通信模块 , ccid...">
 					</div>
 				</div>
 				<div class="form-group search-group-btn">
@@ -49,6 +49,23 @@
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
+		            label : '心跳周期',
+		            name : 'heartCycle',
+		            formatter: 'integer',
+		            editable: true                                                                   
+		        }, {
+		            label : '通信模块',
+		            name : 'route',
+		            width : 255,
+		            align : 'center',
+		            editable: true                                                                   
+		        }, {
+		            label : 'ccid',
+		            name : 'ccid',
+		            width : 255,
+		            align : 'center',
+		            editable: true                                                                   
+		        }, {
 		            label : '可借数',
 		            name : 'usable',
 		            formatter: 'integer',
@@ -57,6 +74,17 @@
 		            label : '可还数',
 		            name : 'empty',
 		            formatter: 'integer',
+		            editable: true                                                                   
+		        }, {
+		            label : '总数',
+		            name : 'total',
+		            formatter: 'integer',
+		            editable: true                                                                   
+		        }, {
+		            label : '可用电池',
+		            name : 'usableBattery',
+		            width : 255,
+		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '槽位状态',

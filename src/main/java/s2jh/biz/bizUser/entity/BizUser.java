@@ -54,5 +54,5 @@ public class BizUser extends BaseNativeEntity {
     // 1:取消 0:未取消
     @MetaData("是否取消关注")
     @Column(name = "unsubscribe")
-    private boolean unsubscribe;
+    private boolean unsubscribe = false;
 }
