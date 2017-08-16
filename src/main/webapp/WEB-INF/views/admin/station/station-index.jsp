@@ -40,7 +40,7 @@
         $("#grid-station-station-index").data("gridOptions", {
             url: WEB_ROOT + '/admin/station/station/list',
             colModel: [{
-                label: '流水号',
+                label: '设备ID',
                 name: 'id',
                 hidden: false
             }, {
@@ -49,25 +49,6 @@
                 width: 120,
                 align: 'center',
                 editable: false
-            }, {
-                label: '心跳周期',
-                name: 'heartCycle',
-                formatter: 'integer',
-                editable: true
-            }, {
-                label: '通信模块',
-                name: 'route',
-                width: 40,
-                align: 'center',
-                editable: false,
-                hidden: true
-            }, {
-                label: 'ccid',
-                name: 'ccid',
-                width: 120,
-                align: 'center',
-                editable: false,
-                hidden: true
             }, {
                 label: '可借数',
                 name: 'usable',
@@ -86,8 +67,8 @@
             }, {
                 label: '可用电池',
                 name: 'usableBattery',
-                width: 100,
-                align: 'left',
+                width: 140,
+                align: 'right',
                 editable: false
             }, {
                 label: '槽位状态',
@@ -95,6 +76,26 @@
                 width: 120,
                 align: 'center',
                 editable: false
+            }, {
+                label: '开机时长',
+                name: 'powerOnTime',
+                width: 120,
+                editable: false
+            }, {
+                label: '同步时间',
+                name: 'sync_time',
+                width: 120,
+                editable: false
+            }, {
+                label: '断电时间',
+                name: 'last_power_off_time',
+                width: 120,
+                editable: false
+            }, {
+                label: '心跳周期',
+                name: 'heartCycle',
+                formatter: 'integer',
+                editable: true
             }, {
                 label: '设备名',
                 name: 'title',
@@ -112,9 +113,19 @@
                 formatter: 'integer',
                 editable: false
             }, {
-                label: '开机时长',
-                name: 'powerOnTime',
-                editable: false
+                label: '通信模块',
+                name: 'route',
+                width: 40,
+                align: 'center',
+                editable: false,
+                hidden: true
+            }, {
+                label: 'ccid',
+                name: 'ccid',
+                width: 120,
+                align: 'center',
+                editable: false,
+                hidden: true
             }],
             editurl: WEB_ROOT + '/admin//station/station/edit',
             editrulesurl: WEB_ROOT + '/admin/util/validate?clazz=${clazz}',
