@@ -21,13 +21,13 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_station")
-@MetaData(value = "设备表")
+@MetaData(value = "业务模块:设备表")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Station extends BaseNativeEntity {
     private static final long serialVersionUID = -7293995948887951079L;
 
     @MetaData("Mac地址")
-    @Column(name = "mac")
+    @Column(name = "mac", nullable = false, unique = true)
     private String mac;
 
     @MetaData("心跳周期")
@@ -63,9 +63,9 @@ public class Station extends BaseNativeEntity {
     private String slotstatus;
 
     // "2:安卓苹果二合一线 3:TypeC线"
-    @MetaData("线类型")
-    @Column(name = "cable")
-    private Integer cable;
+//    @MetaData("线类型")
+//    @Column(name = "cable")
+//    private Integer cable;
 
     @MetaData("设备名")
     @Column(name = "title")
@@ -89,7 +89,7 @@ public class Station extends BaseNativeEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date syncTime;
 
-    @MetaData("同步时间")
+    @MetaData("断电时间")
     @JsonProperty
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_power_off_time")

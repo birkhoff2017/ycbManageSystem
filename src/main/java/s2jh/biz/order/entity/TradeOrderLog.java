@@ -101,6 +101,10 @@ public class TradeOrderLog extends BaseNativeEntity {
     @JoinColumn(name = "return_shop_station_id")
     private ShopStation returnShopStation;
 
+    @MetaData("借出电池id")
+    @Column(name = "borrow_battery_rfid")
+    private String borrowBattery;
+
     @MetaData("借出时所在城市")
     @Column(name = "borrow_city")
     private String borrowCity;

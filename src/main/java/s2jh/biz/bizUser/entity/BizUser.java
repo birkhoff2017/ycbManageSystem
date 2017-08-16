@@ -34,7 +34,7 @@ public class BizUser extends BaseNativeEntity {
     @Column(name = "openid", nullable = false, unique = true)
     private String openid;
 
-    //"0:微信 1:支付宝 2:芝麻信用"
+    //"0:微信 1:支付宝 2:芝麻信用 3:小程序"
     @MetaData("用户所属平台")
     @Column(name = "platform", nullable = false)
     private Integer platform = 0;
