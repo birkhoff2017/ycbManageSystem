@@ -59,6 +59,7 @@ public class BizUserInfo extends BaseNativeEntity {
 
     @MetaData("关注时间")
     @Column(name = "subscribe_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date subscribeTime;
 
     @MetaData("unionid")

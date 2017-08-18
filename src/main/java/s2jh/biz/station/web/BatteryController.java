@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @MetaData("业务模块:充电宝电池管理")
 @Controller
 @RequestMapping(value = "/admin/station/battery")
-public class BatteryController extends BaseController<Battery,Long> {
+public class BatteryController extends BaseController<Battery, Long> {
 
     @Autowired
     private BatteryService batteryService;
@@ -30,19 +30,19 @@ public class BatteryController extends BaseController<Battery,Long> {
     protected BaseService<Battery, Long> getEntityService() {
         return batteryService;
     }
-    
+
     @ModelAttribute
     public void prepareModel(HttpServletRequest request, Model model, @RequestParam(value = "id", required = false) Long id) {
         super.initPrepareModel(request, model, id);
     }
-    
+
     @MenuData("业务模块:充电宝电池")
     @RequiresPermissions("业务模块:充电宝电池")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/station/battery-index";
-    }   
-    
+    }
+
     @RequiresPermissions("业务模块:充电宝电池")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
@@ -50,7 +50,7 @@ public class BatteryController extends BaseController<Battery,Long> {
     public Page<Battery> findByPage(HttpServletRequest request) {
         return super.findByPage(Battery.class, request);
     }
-    
+
     @RequestMapping(value = "/edit-tabs", method = RequestMethod.GET)
     public String editTabs(HttpServletRequest request) {
         return "admin/station/battery-inputTabs";

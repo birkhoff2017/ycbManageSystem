@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @MetaData("客户详情管理")
 @Controller
 @RequestMapping(value = "/admin/bizUser/biz-user-info")
-public class BizUserInfoController extends BaseController<BizUserInfo,Long> {
+public class BizUserInfoController extends BaseController<BizUserInfo, Long> {
 
     @Autowired
     private BizUserInfoService bizUserInfoService;
@@ -30,19 +30,19 @@ public class BizUserInfoController extends BaseController<BizUserInfo,Long> {
     protected BaseService<BizUserInfo, Long> getEntityService() {
         return bizUserInfoService;
     }
-    
+
     @ModelAttribute
     public void prepareModel(HttpServletRequest request, Model model, @RequestParam(value = "id", required = false) Long id) {
         super.initPrepareModel(request, model, id);
     }
-    
+
     @MenuData("业务模块:客户详情")
     @RequiresPermissions("客户详情")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/bizUser/bizUserInfo-index";
-    }   
-    
+    }
+
     @RequiresPermissions("客户详情")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
@@ -50,7 +50,7 @@ public class BizUserInfoController extends BaseController<BizUserInfo,Long> {
     public Page<BizUserInfo> findByPage(HttpServletRequest request) {
         return super.findByPage(BizUserInfo.class, request);
     }
-    
+
     @RequestMapping(value = "/edit-tabs", method = RequestMethod.GET)
     public String editTabs(HttpServletRequest request) {
         return "admin/bizUser/bizUserInfo-inputTabs";

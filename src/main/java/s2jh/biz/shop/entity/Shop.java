@@ -56,10 +56,12 @@ public class Shop extends BaseNativeEntity {
 
     @MetaData("营业开始时间")
     @Column(name = "stime")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date stime;
 
     @MetaData("营业结束时间")
     @Column(name = "etime")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date etime;
 
     @MetaData("logo")

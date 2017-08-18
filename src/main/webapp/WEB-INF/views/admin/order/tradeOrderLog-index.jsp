@@ -167,6 +167,18 @@
                 formatter: 'currency',
                 align: 'center',
                 editable: false
+            }, {
+                label: '借出时间',
+                name: 'borrowTime',
+                formatter: 'timestamp',
+                width: 120,
+                editable: false
+            }, {
+                label: '归还时间',
+                name: 'returnTime',
+                formatter: 'timestamp',
+                width: 120,
+                editable: false
             }],
             postData: {
                 "search['FETCH_bizUser']": "INNER",
