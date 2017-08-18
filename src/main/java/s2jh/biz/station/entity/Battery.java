@@ -31,10 +31,14 @@ public class Battery extends BaseNativeEntity {
     @Column(name = "rfid")
     private String rfid;
 
-    @MetaData("最近所在设备")
+    @MetaData("所在设备")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stationid")
     private Station station;
+
+    @MetaData("所在设备槽位")
+    @Column(name = "slot")
+    private Integer slot;
 
     @MetaData("最近所属订单")
     @OneToOne(fetch = FetchType.LAZY)
@@ -45,10 +49,6 @@ public class Battery extends BaseNativeEntity {
     @MetaData("电池状态")
     @Column(name = "status")
     private Integer status;
-
-    @MetaData("最近所在设备槽位")
-    @Column(name = "slot")
-    private Integer slot;
 
     @MetaData("电池类型")
     @Column(name = "batt_type")

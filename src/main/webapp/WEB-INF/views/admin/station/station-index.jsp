@@ -74,8 +74,8 @@
             }, {
                 label: '可用电池',
                 name: 'usableBattery',
-                width: 100,
-                align: 'center',
+                width: 140,
+                align: 'right',
                 editable: false
             }, {
                 label: '槽位状态',
@@ -87,16 +87,17 @@
                 label: '开机时长',
                 name: 'powerOnTime',
                 width: 120,
-                align: 'center',
                 editable: false
             }, {
                 label: '同步时间',
-                name: 'sync_time',
+                name: 'syncTime',
+                formatter: 'timestamp',
                 width: 120,
                 editable: false
             }, {
                 label: '断电时间',
-                name: 'last_power_off_time',
+                name: 'lastPowerOffTime',
+                formatter: 'timestamp',
                 width: 120,
                 editable: false
             }, {
@@ -105,15 +106,21 @@
                 formatter: 'integer',
                 editable: true
             }, {
+                label: '心跳率',
+                name: 'heartbeatRate',
+                formatter: 'integer',
+                editable: false
+            }, {
                 label: '设备版本',
                 name: 'deviceVer',
                 formatter: 'integer',
                 editable: true
             }, {
-                label: '心跳率',
-                name: 'heartbeatRate',
-                formatter: 'integer',
-                editable: false
+                label: '设备名',
+                name: 'title',
+                width: 120,
+                align: 'center',
+                editable: true
             }, {
                 label: '通信模块',
                 name: 'route',

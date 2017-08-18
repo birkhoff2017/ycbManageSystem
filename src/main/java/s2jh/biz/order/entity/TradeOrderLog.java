@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.format.annotation.DateTimeFormat;
 import s2jh.biz.bizUser.entity.BizUser;
 import s2jh.biz.shop.entity.Shop;
 import s2jh.biz.shop.entity.ShopStation;
@@ -15,7 +14,7 @@ import s2jh.biz.station.entity.Station;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by zhuhui on 17-6-27.
@@ -37,10 +36,6 @@ public class TradeOrderLog extends BaseNativeEntity {
     @Column(name = "orderid", length = 32, nullable = false, unique = true)
     private String orderid;
 
-    @MetaData("订单金额")
-    @Column(name = "price", precision = 8, scale = 2)
-    private BigDecimal price = BigDecimal.ZERO;
-
     @MetaData("用户")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer", nullable = false)
@@ -55,12 +50,13 @@ public class TradeOrderLog extends BaseNativeEntity {
     private Integer status = 0;
 
     @MetaData("借出时间")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "borrow_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date borrowTime;
 
     @MetaData("归还时间")
     @Column(name = "return_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date returnTime;
 
     @MetaData("借出商铺id")
@@ -105,13 +101,21 @@ public class TradeOrderLog extends BaseNativeEntity {
     @Column(name = "borrow_battery_rfid")
     private String borrowBattery;
 
-    @MetaData("借出时所在城市")
-    @Column(name = "borrow_city")
-    private String borrowCity;
+    @MetaData("借出电池线类型")
+    @Column(name = "cable")
+    private String cable;
 
-    @MetaData("归还时所在城市")
-    @Column(name = "return_city")
-    private String returnCity;
+//    @MetaData("借出时所在城市")
+//    @Column(name = "borrow_city")
+//    private String borrowCity;
+
+//    @MetaData("归还时所在城市")
+//    @Column(name = "return_city")
+//    private String returnCity;
+
+    @MetaData("订单价格")
+    @Column(name = "price", precision = 8, scale = 2)
+    private BigDecimal price = BigDecimal.ZERO;
 
     @MetaData("已退款金额")
     @Column(name = "refunded")

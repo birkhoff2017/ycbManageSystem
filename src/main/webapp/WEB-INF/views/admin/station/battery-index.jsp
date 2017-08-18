@@ -50,11 +50,16 @@
                 align: 'center',
                 editable: false
             }, {
-                label: '最近所在设备',
+                label: '所在设备',
                 name: 'station.id',
                 width: 80,
                 index: 'station',
                 align: 'center',
+                editable: false
+            }, {
+                label: '所在设备槽位',
+                name: 'slot',
+                formatter: 'integer',
                 editable: false
             }, {
                 label: '最近所属订单',
@@ -68,11 +73,6 @@
                 formatter: 'integer',
                 editable: false
             }, {
-                label: '最近所在设备槽位',
-                name: 'slot',
-                formatter: 'integer',
-                editable: false
-            }, {
                 label: '电池类型',
                 name: 'battType',
                 width: 40,
@@ -80,7 +80,7 @@
                 editable: false
             }, {
                 label: '颜色',
-                name: 'colorId',
+                name: 'colorid',
                 formatter: 'integer',
                 editable: false
             }, {

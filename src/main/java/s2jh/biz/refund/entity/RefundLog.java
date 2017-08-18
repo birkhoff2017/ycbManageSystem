@@ -12,7 +12,7 @@ import s2jh.biz.bizUser.entity.BizUser;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by 杜欣源:提现记录 on 17-8-3.
