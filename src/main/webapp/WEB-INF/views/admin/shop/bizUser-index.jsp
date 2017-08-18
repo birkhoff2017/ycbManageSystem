@@ -51,21 +51,25 @@
 		            label : '账户余额',
 		            name : 'usablemoney',
 		            formatter: 'number',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '押金',
 		            name : 'deposit',
 		            formatter: 'number',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '待退款数目',
 		            name : 'refund',
 		            formatter: 'number',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 					label : '用户所属平台',
 					name : 'platform',
 					formatter: 'select',
+                    align : 'center',
 					searchoptions: {
 						value: Util.getCacheDictDatasByType("Platform")
 					},

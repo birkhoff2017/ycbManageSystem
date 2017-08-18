@@ -42,7 +42,14 @@
             colModel: [{
                 label: '设备ID',
                 name: 'id',
+                width: 100,
                 hidden: false
+            },  {
+                label: '设备名',
+                name: 'title',
+                width: 120,
+                align: 'center',
+                editable: true
             }, {
                 label: 'Mac地址',
                 name: 'mac',
@@ -67,8 +74,8 @@
             }, {
                 label: '可用电池',
                 name: 'usableBattery',
-                width: 140,
-                align: 'right',
+                width: 100,
+                align: 'center',
                 editable: false
             }, {
                 label: '槽位状态',
@@ -80,6 +87,7 @@
                 label: '开机时长',
                 name: 'powerOnTime',
                 width: 120,
+                align: 'center',
                 editable: false
             }, {
                 label: '同步时间',
@@ -95,12 +103,6 @@
                 label: '心跳周期',
                 name: 'heartCycle',
                 formatter: 'integer',
-                editable: true
-            }, {
-                label: '设备名',
-                name: 'title',
-                width: 120,
-                align: 'center',
                 editable: true
             }, {
                 label: '设备版本',

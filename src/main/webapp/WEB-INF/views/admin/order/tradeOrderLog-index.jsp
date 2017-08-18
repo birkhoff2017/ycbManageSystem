@@ -50,7 +50,7 @@
                 align: 'center',
                 editable: false
             }, {
-                label: '用户',
+                label: '用户openid',
                 name: 'bizUser.openid',
                 width: 200,
                 index: 'bizUser',
@@ -65,6 +65,8 @@
             }, {
                 label: '平台',
                 name: 'platform',
+                align: 'center',
+                width: 80,
                 formatter: 'select',
                 searchoptions: {
                     value: Util.getCacheDictDatasByType("Platform")
@@ -78,7 +80,7 @@
             }, {
                 label: '电池ID',
                 name: 'borrow_battery_rfid',
-                width: 80,
+                width: 100,
                 align: 'center',
                 editable: false
             }, {
@@ -86,23 +88,25 @@
                 name: 'borrowShop.id',
                 index: 'borrowShop',
                 align: 'center',
+                width: 100,
                 editable: false
             }, {
                 label: '归还商铺id',
                 name: 'returnShop.id',
                 index: 'returnShop',
                 align: 'center',
+                width: 100,
                 editable: false
             }, {
                 label: '借出商铺名',
                 name: 'borrowShopName',
-                width: 80,
+                width: 100,
                 align: 'center',
                 editable: false
             }, {
                 label: '归还商铺名',
                 name: 'returnShopName',
-                width: 80,
+                width: 100,
                 align: 'center',
                 editable: false
             }, {
@@ -110,35 +114,39 @@
                 name: 'borrowStation.id',
                 index: 'borrowStation',
                 align: 'center',
+                width: 100,
                 editable: false
             }, {
                 label: '归还设备id',
                 name: 'returnStation.id',
                 index: 'returnStation',
                 align: 'center',
+                width: 100,
                 editable: false
             }, {
                 label: '借出商铺站点id',
                 name: 'borrowShopStation.id',
                 index: 'borrowShopStation',
                 align: 'center',
+                width: 100,
                 editable: false
             }, {
                 label: '归还商铺站点id',
                 name: 'returnShopStation.id',
                 index: 'returnShopStation',
                 align: 'center',
+                width: 100,
                 editable: false
             }, {
                 label: '借出时所在城市',
                 name: 'borrowCity',
-                width: 60,
+                width: 80,
                 align: 'center',
                 editable: false
             }, {
                 label: '归还时所在城市',
                 name: 'returnCity',
-                width: 60,
+                width: 80,
                 align: 'center',
                 editable: false
             }, {
