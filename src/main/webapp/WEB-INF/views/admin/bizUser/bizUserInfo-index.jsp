@@ -45,13 +45,13 @@
 		        }, {
 		            label : '用户openid',
 		            name : 'openid',
-		            width : 255,
+		            width : 220,
 		            align : 'center',
-		            editable: true                                                                   
+		            editable: false
 		        }, {
 		            label : '昵称',
 		            name : 'nickname',
-		            width : 255,
+		            width : 180,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
@@ -62,19 +62,19 @@
 		        }, {
 		            label : '城市',
 		            name : 'city',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '省份',
 		            name : 'province',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '国家',
 		            name : 'country',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
@@ -86,25 +86,25 @@
 		        }, {
 		            label : '语言',
 		            name : 'language',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : 'unionid',
 		            name : 'unionid',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : 'remark',
 		            name : 'remark',
-		            width : 255,
+		            width : 180,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '组',
 		            name : 'groupid',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        } ],

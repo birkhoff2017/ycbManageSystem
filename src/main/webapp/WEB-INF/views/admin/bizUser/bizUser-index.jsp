@@ -45,12 +45,14 @@
 		        }, {
 		            label : '用户openid',
 		            name : 'openid',
-		            width : 255,
-		            align : 'center',
-		            editable: true                                                                   
+                    align : 'center',
+                    width : 220,
+		            editable: false
 		        }, {
 		            label : '用户所属平台',
 		            name : 'platform',
+                    align : 'center',
+                    width : 220,
                     formatter: 'select',
                     searchoptions: {
                         value: Util.getCacheDictDatasByType("Platform")
@@ -59,18 +61,21 @@
 		        }, {
 		            label : '账户余额',
 		            name : 'usablemoney',
-		            formatter: 'number',
-		            editable: true                                                                   
+                    align : 'center',
+                    formatter: 'number',
+		            editable: true
 		        }, {
 		            label : '押金',
 		            name : 'deposit',
-		            formatter: 'number',
-		            editable: true                                                                   
+                    align : 'center',
+                    formatter: 'number',
+		            editable: true
 		        }, {
 		            label : '待退款数目',
 		            name : 'refund',
-		            formatter: 'number',
-		            editable: true                                                                   
+                    align : 'center',
+                    formatter: 'number',
+		            editable: true
 		        } ],
 		        editurl : WEB_ROOT + '/admin//bizUser/biz-user/edit',
 		        editrulesurl : WEB_ROOT + '/admin/util/validate?clazz=${clazz}',

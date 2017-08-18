@@ -46,60 +46,72 @@
 		            label : '关联商铺',
 		            name : 'shop.name',
 		            index : 'shop',
+                    width : 100,
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '关联设备',
 		            name : 'station.title',
 		            index : 'station',
+                    width : 100,
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '设备码',
 		            name : 'lbsid',
+                    width : 100,
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '商铺名',
 		            name : 'title',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '设备具体摆放位置',
 		            name : 'position',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '地址',
 		            name : 'address',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '经度',
 		            name : 'longitude',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '纬度',
 		            name : 'latitude',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '费用设置',
 		            name : 'feeSettings',
 		            formatter: 'integer',
-		            editable: true                                                                   
+                    width : 100,
+                    align : 'center',
+                    editable: true
 		        }, {
 		            label : '销售',
 		            name : 'admin.display',
-		            index : 'admin',
+                    width : 100,
+                    index : 'admin',
+                    align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '设备状态',
 		            name : 'status',
+                    width : 100,
 		            formatter: 'integer',
+                    align : 'center',
 		            editable: true                                                                   
 		        } ],
 		        postData: {

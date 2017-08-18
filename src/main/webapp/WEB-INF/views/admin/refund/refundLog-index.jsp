@@ -43,34 +43,49 @@
 		            name : 'id',
 		            hidden : true                          
 		        }, {
-		            label : '用户id',
-		            name : 'bizUser.id',
+		            label : '用户openid',
+		            name : 'bizUser.openid',
 		            width : 200,
 		            align : 'center',
-		            editable: true                                                                   
+		            editable: false
 		        }, {
 		            label : '提现金额',
 		            name : 'refund',
 		            formatter: 'currency',
                     align : 'center',
-		            editable: true                                                                   
-		        }, {
+                    width : 100,
+		            editable: false
+		        },  {
+                    label : '提现发起时间',
+                    name : 'requestTime',
+                    align : 'center',
+                    width : 150,
+                    editable: false
+                }, {
 		            label : '已退款金额',
 		            name : 'refunded',
 		            formatter: 'currency',
                     align : 'center',
-		            editable: true                                                                   
-		        }, {
+                    width : 100,
+		            editable: false
+		        },  {
+                    label : '提现成功时间',
+                    name : 'refundTime',
+                    align : 'center',
+                    width : 150,
+                    editable: false
+                }, {
 		            label : '状态',
 		            name : 'status',
 		            formatter: 'integer',
-		            editable: true                                                                   
+                    width : 80,
+		            editable: false
 		        }, {
 		            label : '退款描述',
 		            name : 'detail',
-		            width : 255,
+		            width : 180,
 		            align : 'center',
-		            editable: true                                                                   
+		            editable: false
 		        } ],
 		        postData: {
 		           "search['FETCH_bizUser']" : "INNER"
