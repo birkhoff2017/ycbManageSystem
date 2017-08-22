@@ -48,7 +48,13 @@
 		            width : 200,
 		            align : 'center',
 		            editable: false
-		        }, {
+		        },  {
+                    label : '订单编号',
+                    name : 'orderid',
+                    width : 200,
+                    align : 'center',
+                    editable: false
+                }, {
 		            label : '提现金额',
 		            name : 'refund',
 		            formatter: 'currency',
