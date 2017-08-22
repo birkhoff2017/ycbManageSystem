@@ -252,7 +252,7 @@ public class SourceCodeBuilder {
                     className + "Controller.java");
             process(cfg.getTemplate("Test.ftl"), root, integrateRootPath + File.separator + "test" + File.separator + "service" + File.separator,
                     className + "ServiceTest.java");
-            process(cfg.getTemplate("JSP_Index.ftl"), root, integrateRootPath + File.separator + "jsp" + File.separator, nameField + "-ind22ex.jsp");
+            process(cfg.getTemplate("JSP_Index.ftl"), root, integrateRootPath + File.separator + "jsp" + File.separator, nameField + "-index.jsp");
             process(cfg.getTemplate("JSP_Input_Tabs.ftl"), root, integrateRootPath + File.separator + "jsp" + File.separator, nameField
                     + "-inputTabs.jsp");
             process(cfg.getTemplate("JSP_Input_Basic.ftl"), root, integrateRootPath + File.separator + "jsp" + File.separator, nameField
@@ -266,7 +266,7 @@ public class SourceCodeBuilder {
                     className + "Controller.java");
             process(cfg.getTemplate("Test.ftl"), root, standaloneRootPath + File.separator + "test" + File.separator + "service" + File.separator,
                     className + "ServiceTest.java");
-            process(cfg.getTemplate("JSP_Index.ftl"), root, standaloneRootPath + File.separator + "jsp" + File.separator, nameField + "-ind22ex.jsp");
+            process(cfg.getTemplate("JSP_Index.ftl"), root, standaloneRootPath + File.separator + "jsp" + File.separator, nameField + "-index.jsp");
             process(cfg.getTemplate("JSP_Input_Tabs.ftl"), root, standaloneRootPath + File.separator + "jsp" + File.separator, nameField
                     + "-inputTabs.jsp");
             process(cfg.getTemplate("JSP_Input_Basic.ftl"), root, standaloneRootPath + File.separator + "jsp" + File.separator, nameField
