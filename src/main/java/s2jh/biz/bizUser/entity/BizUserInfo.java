@@ -9,7 +9,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by zhuhui on 17-7-24.
@@ -59,6 +59,7 @@ public class BizUserInfo extends BaseNativeEntity {
 
     @MetaData("关注时间")
     @Column(name = "subscribe_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date subscribeTime;
 
     @MetaData("unionid")

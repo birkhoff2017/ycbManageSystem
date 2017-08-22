@@ -315,13 +315,13 @@ public class SiteIndexController extends BaseController<SiteUser, Long> {
         List<Map> shops = new ArrayList<>();
         Map<String, Object> shop = new HashedMap();
         shop.put("id", "123");
-        shop.put("name","商铺11111");
+        shop.put("name", "商铺11111");
         shop.put("address", "朝阳");
         shop.put("longitude", "100.242081");
         shop.put("latitude", "26.874501");
         Map<String, Object> shop1 = new HashedMap();
         shop1.put("id", "12345");
-        shop1.put("name","商铺22222");
+        shop1.put("name", "商铺22222");
         shop1.put("address", "朝阳1");
         shop1.put("longitude", "100.242081");
         shop1.put("latitude", "26.874501");

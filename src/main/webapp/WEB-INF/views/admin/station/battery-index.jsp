@@ -14,7 +14,7 @@
               data-grid-search="#grid-station-battery-index">
             <div class="form-group">
                 <div class="controls controls-clearfix">
-                    <input type="text" name="search['CN_rfid_OR_orderLog.orderid']" class="form-control input-xlarge"
+                    <input type="text" name="search['CN_rfid_OR_orderid']" class="form-control input-xlarge"
                            placeholder="电池ID , 订单号...">
                 </div>
             </div>
@@ -50,26 +50,25 @@
                 align: 'center',
                 editable: false
             }, {
-                label: '最近所在设备',
+                label: '所在设备',
                 name: 'station.id',
                 width: 80,
                 index: 'station',
                 align: 'center',
                 editable: false
             }, {
+                label: '所在设备槽位',
+                name: 'slot',
+                formatter: 'integer',
+                editable: false
+            }, {
                 label: '最近所属订单',
-                name: 'orderLog.orderid',
+                name: 'orderid',
                 width: 120,
-                index: 'orderLog',
                 editable: false
             }, {
                 label: '电池状态',
                 name: 'status',
-                formatter: 'integer',
-                editable: false
-            }, {
-                label: '最近所在设备槽位',
-                name: 'slot',
                 formatter: 'integer',
                 editable: false
             }, {
@@ -80,7 +79,7 @@
                 editable: false
             }, {
                 label: '颜色',
-                name: 'colorId',
+                name: 'colorid',
                 formatter: 'integer',
                 editable: false
             }, {
@@ -152,8 +151,7 @@
                 hidden: true
             }],
             postData: {
-                "search['FETCH_station']": "LEFT",
-                "search['FETCH_orderLog']": "LEFT"
+                "search['FETCH_station']": "LEFT"
             },
             editurl: WEB_ROOT + '/admin//station/battery/edit',
             editrulesurl: WEB_ROOT + '/admin/util/validate?clazz=${clazz}',

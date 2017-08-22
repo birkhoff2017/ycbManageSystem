@@ -51,10 +51,7 @@
 					<div class="form-group">
 						<label class="control-label">最近所属订单</label>
 						<div class="controls">
-			                <form:hidden path="orderLog.id" class="form-control" data-select2-type="remote"
-								data-url="ctx/admin/path/to/list" data-display="${orderLog.display}"
-								data-query="search['CN_abc_OR_xyz_OR_abc.xyz']" />			                
-			                <form:input path="orderLog.id" class="form-control"/>			                
+							<form:input path="orderid" class="form-control"/>
 						</div>
 					</div>
 	            </div>

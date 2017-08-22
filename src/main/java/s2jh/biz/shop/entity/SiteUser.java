@@ -1,23 +1,15 @@
 package s2jh.biz.shop.entity;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.entity.BaseNativeEntity;
 import lab.s2jh.module.auth.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 @Getter
 @Setter

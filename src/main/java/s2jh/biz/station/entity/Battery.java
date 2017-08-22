@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import s2jh.biz.order.entity.TradeOrderLog;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -31,24 +30,24 @@ public class Battery extends BaseNativeEntity {
     @Column(name = "rfid")
     private String rfid;
 
-    @MetaData("最近所在设备")
+    @MetaData("所在设备")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stationid")
     private Station station;
 
+    @MetaData("所在设备槽位")
+    @Column(name = "slot")
+    private Integer slot;
+
     @MetaData("最近所属订单")
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderid")
-    private TradeOrderLog orderLog;
+    //@OneToOne(fetch = FetchType.LAZY)
+    @Column(name = "orderid")
+    private String orderLog;
 
     // 0：正常;3,4：锁住
     @MetaData("电池状态")
     @Column(name = "status")
     private Integer status;
-
-    @MetaData("最近所在设备槽位")
-    @Column(name = "slot")
-    private Integer slot;
 
     @MetaData("电池类型")
     @Column(name = "batt_type")
