@@ -43,6 +43,20 @@
 		            name : 'id',
 		            hidden : true                          
 		        }, {
+					label : '关联商铺id',
+					name : 'shop.id',
+					index : 'shop.id',
+					width : 60,
+					align : 'center',
+					editable: true
+				}, {
+					label : '关联设备id',
+					name : 'station.id',
+					index : 'station.id',
+					width : 60,
+					align : 'center',
+					editable: true
+				},{
 		            label : '关联商铺',
 		            name : 'shop.name',
 		            index : 'shop',

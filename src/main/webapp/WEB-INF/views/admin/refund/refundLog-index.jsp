@@ -83,7 +83,11 @@
                 }, {
 		            label : '状态',
 		            name : 'status',
-		            formatter: 'integer',
+					align : 'center',
+					formatter: 'select',
+					searchoptions: {
+						value: Util.getCacheDictDatasByType("Refund_Status")
+					},
                     width : 80,
 		            editable: false
 		        }, {

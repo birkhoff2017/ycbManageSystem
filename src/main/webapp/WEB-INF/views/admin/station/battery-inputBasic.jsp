@@ -50,7 +50,7 @@
 	            <div class="col-md-6">
 					<div class="form-group">
 						<label class="control-label">最近所属订单</label>
-						<div class="controls">
+						<div class="cont    rols">
 							<form:input path="orderid" class="form-control"/>
 						</div>
 					</div>

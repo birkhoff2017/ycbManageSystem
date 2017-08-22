@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 @MetaData("客户管理")
 @Controller
-@RequestMapping(value = "/admin/shop/biz-user")
+@RequestMapping(value = "/admin/bizUser/biz-user")
 public class BizUserController extends BaseController<BizUser, Long> {
 
     @Autowired
@@ -56,7 +56,7 @@ public class BizUserController extends BaseController<BizUser, Long> {
     @RequiresPermissions("业务模块:客户管理")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
-        return "admin/shop/bizUser-index";
+        return "admin/bizUser/bizUser-index";
     }
 
     @RequiresPermissions("客户管理")
@@ -69,13 +69,13 @@ public class BizUserController extends BaseController<BizUser, Long> {
 
     @RequestMapping(value = "/edit-tabs", method = RequestMethod.GET)
     public String editTabs(HttpServletRequest request) {
-        return "admin/shop/bizUser-inputTabs";
+        return "admin/bizUser/bizUser-inputTabs";
     }
 
     @RequiresPermissions("客户管理")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
-        return "admin/shop/bizUser-inputBasic";
+        return "admin/bizUser/bizUser-inputBasic";
     }
 
     @RequiresPermissions("客户管理")

@@ -46,13 +46,13 @@
 		            label : '用户openid',
 		            name : 'openid',
                     align : 'center',
-                    width : 220,
+                    width : 80,
 		            editable: false
 		        }, {
 		            label : '用户所属平台',
 		            name : 'platform',
                     align : 'center',
-                    width : 220,
+                    width : 50,
                     formatter: 'select',
                     searchoptions: {
                         value: Util.getCacheDictDatasByType("Platform")
@@ -62,19 +62,19 @@
 		            label : '账户余额',
 		            name : 'usablemoney',
                     align : 'center',
-                    formatter: 'number',
+                    formatter: 'currency',
 		            editable: true
 		        }, {
 		            label : '押金',
 		            name : 'deposit',
                     align : 'center',
-                    formatter: 'number',
+                    formatter: 'currency',
 		            editable: true
 		        }, {
-		            label : '待退款数目',
+		            label : '待退款',
 		            name : 'refund',
                     align : 'center',
-                    formatter: 'number',
+                    formatter: 'currency',
 		            editable: true
 		        } ],
 		        editurl : WEB_ROOT + '/admin//bizUser/biz-user/edit',

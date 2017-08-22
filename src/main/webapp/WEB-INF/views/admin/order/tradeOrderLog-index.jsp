@@ -81,7 +81,7 @@
                 searchoptions: {
                     value: Util.getCacheDictDatasByType("Trade_Order_Status")
                 },
-                editable: false
+                editable: true
             }, {
                 label: '电池ID',
                 name: 'borrow_battery_rfid',

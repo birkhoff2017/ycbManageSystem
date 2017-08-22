@@ -41,35 +41,35 @@
 		        colModel : [ {
 		            label : '流水号',
 		            name : 'id',
-		            hidden : true                          
+		            hidden : false
 		        }, {
 		            label : '商铺名',
 		            name : 'name',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '省份',
 		            name : 'province',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '城市',
 		            name : 'city',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '区域',
 		            name : 'area',
-		            width : 255,
+		            width : 100,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '地址',
 		            name : 'locate',
-		            width : 255,
+		            width : 150,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
@@ -80,19 +80,19 @@
 		        }, {
 		            label : '手机',
 		            name : 'phone',
-		            width : 255,
+		            width : 80,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : 'logo',
 		            name : 'logo',
-		            width : 255,
+		            width : 50,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '轮播图',
 		            name : 'carousel',
-		            width : 255,
+		            width : 50,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {

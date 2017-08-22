@@ -53,7 +53,7 @@
                 label: '所在设备',
                 name: 'station.id',
                 width: 80,
-                index: 'station',
+                index: 'station.id',
                 align: 'center',
                 editable: false
             }, {
