@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.format.annotation.DateTimeFormat;
 import s2jh.biz.bizUser.entity.BizUser;
 
 import javax.persistence.*;
@@ -39,6 +38,11 @@ public class RefundLog extends BaseNativeEntity {
     @JoinColumn(name = "uid", nullable = false)
     private BizUser bizUser;
 
+    //新添加的字段 使退款与订单对应上   一条退款对应一个订单
+    @MetaData("订单编号")
+    @Column(name = "orderid")
+    private String orderid;
+
     @MetaData("提现金额")
     @Column(name = "refund")
     private BigDecimal refund;
@@ -52,12 +56,13 @@ public class RefundLog extends BaseNativeEntity {
     private Integer status = 0;
 
     @MetaData("发起时间")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "request_time")
     private Date requestTime;
 
     @MetaData("提现时间")
     @Column(name = "refund_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date refundTime;
 
     @MetaData("退款描述")
