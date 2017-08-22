@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import s2jh.biz.order.entity.TradeOrderLog;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -41,9 +40,9 @@ public class Battery extends BaseNativeEntity {
     private Integer slot;
 
     @MetaData("最近所属订单")
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderid")
-    private TradeOrderLog orderLog;
+    //@OneToOne(fetch = FetchType.LAZY)
+    @Column(name = "orderid")
+    private String orderLog;
 
     // 0：正常;3,4：锁住
     @MetaData("电池状态")

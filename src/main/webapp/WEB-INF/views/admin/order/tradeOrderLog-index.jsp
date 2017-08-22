@@ -75,7 +75,12 @@
             }, {
                 label: '状态',
                 name: 'status',
-                formatter: 'integer',
+                align: 'center',
+                width: 100,
+                formatter: 'select',
+                searchoptions: {
+                    value: Util.getCacheDictDatasByType("Trade_Order_Status")
+                },
                 editable: false
             }, {
                 label: '电池ID',
@@ -91,21 +96,8 @@
                 width: 100,
                 editable: false
             }, {
-                label: '归还商铺id',
-                name: 'returnShop.id',
-                index: 'returnShop',
-                align: 'center',
-                width: 100,
-                editable: false
-            }, {
                 label: '借出商铺名',
                 name: 'borrowShopName',
-                width: 100,
-                align: 'center',
-                editable: false
-            }, {
-                label: '归还商铺名',
-                name: 'returnShopName',
                 width: 100,
                 align: 'center',
                 editable: false
@@ -117,16 +109,35 @@
                 width: 100,
                 editable: false
             }, {
-                label: '归还设备id',
-                name: 'returnStation.id',
-                index: 'returnStation',
+                label: '借出商铺站点id',
+                name: 'borrowShopStation.id',
+                index: 'borrowShopStation',
                 align: 'center',
                 width: 100,
                 editable: false
             }, {
-                label: '借出商铺站点id',
-                name: 'borrowShopStation.id',
-                index: 'borrowShopStation',
+                label: '借出时所在城市',
+                name: 'borrowCity',
+                width: 80,
+                align: 'center',
+                editable: false
+            }, {
+                label: '归还商铺id',
+                name: 'returnShop.id',
+                index: 'returnShop',
+                align: 'center',
+                width: 100,
+                editable: false
+            }, {
+                label: '归还商铺名',
+                name: 'returnShopName',
+                width: 100,
+                align: 'center',
+                editable: false
+            }, {
+                label: '归还设备id',
+                name: 'returnStation.id',
+                index: 'returnStation',
                 align: 'center',
                 width: 100,
                 editable: false
@@ -136,12 +147,6 @@
                 index: 'returnShopStation',
                 align: 'center',
                 width: 100,
-                editable: false
-            }, {
-                label: '借出时所在城市',
-                name: 'borrowCity',
-                width: 80,
-                align: 'center',
                 editable: false
             }, {
                 label: '归还时所在城市',
@@ -171,13 +176,13 @@
                 label: '借出时间',
                 name: 'borrowTime',
                 formatter: 'timestamp',
-                width: 120,
+                width: 130,
                 editable: false
             }, {
                 label: '归还时间',
                 name: 'returnTime',
                 formatter: 'timestamp',
-                width: 120,
+                width: 130,
                 editable: false
             }],
             postData: {
