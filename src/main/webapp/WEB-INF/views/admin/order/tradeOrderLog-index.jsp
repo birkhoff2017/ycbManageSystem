@@ -155,22 +155,24 @@
                 align: 'center',
                 editable: false
             }, {
-                label: '已退款金额',
-                name: 'refunded',
-                formatter: 'currency',
-                align: 'center',
-                editable: false
+                label : '已退款至账户金额',
+                name : 'refunded',
+                formatter: 'number',
+                editable: true
+            }, {
+                label : '已退款至可用余额',
+                name : 'refundedUsable',
+                formatter: 'number',
+                editable: true
             }, {
                 label: '租金',
                 name: 'usefee',
                 formatter: 'currency',
-                align: 'center',
                 editable: false
             }, {
                 label: '已付款',
                 name: 'paid',
                 formatter: 'currency',
-                align: 'center',
                 editable: false
             }, {
                 label: '借出时间',

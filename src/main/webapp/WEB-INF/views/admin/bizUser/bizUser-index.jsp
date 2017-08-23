@@ -46,7 +46,7 @@
 		            label : '用户openid',
 		            name : 'openid',
                     align : 'center',
-                    width : 80,
+                    width : 100,
 		            editable: false
 		        }, {
 		            label : '用户所属平台',
@@ -71,12 +71,17 @@
                     formatter: 'currency',
 		            editable: true
 		        }, {
-		            label : '待退款',
+		            label : '待退款金额',
 		            name : 'refund',
                     align : 'center',
                     formatter: 'currency',
 		            editable: true
-		        } ],
+		        }, {
+					label : '已退款金额',
+					name : 'refunded',
+					formatter: 'number',
+					editable: true
+				} ],
 		        editurl : WEB_ROOT + '/admin//bizUser/biz-user/edit',
 		        editrulesurl : WEB_ROOT + '/admin/util/validate?clazz=${clazz}',
 		        delurl : WEB_ROOT + '/admin/bizUser/biz-user/delete',
