@@ -117,9 +117,13 @@ public class TradeOrderLog extends BaseNativeEntity {
     @Column(name = "price", precision = 8, scale = 2)
     private BigDecimal price = BigDecimal.ZERO;
 
-    @MetaData("已退款金额")
+    @MetaData("已退款至账户金额")
     @Column(name = "refunded")
     private BigDecimal refunded;
+
+    @MetaData("已退款至可用余额")
+    @Column(name = "refundedUsable")
+    private BigDecimal refundedUsable;
 
     @MetaData("租金")
     @Column(name = "usefee")

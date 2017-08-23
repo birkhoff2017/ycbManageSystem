@@ -47,9 +47,13 @@ public class BizUser extends BaseNativeEntity {
     @Column(name = "deposit", precision = 8, scale = 2, nullable = false)
     private BigDecimal deposit = BigDecimal.ZERO;
 
-    @MetaData("待退款数目")
+    @MetaData("待退款金额")
     @Column(name = "refund", precision = 8, scale = 2, nullable = false)
     private BigDecimal refund = BigDecimal.ZERO;
+
+    @MetaData("已退款金额")
+    @Column(name = "refunded", precision = 8, scale = 2, nullable = false)
+    private BigDecimal refunded = BigDecimal.ZERO;
 
     // 1:取消 0:未取消
     @MetaData("是否取消关注")
