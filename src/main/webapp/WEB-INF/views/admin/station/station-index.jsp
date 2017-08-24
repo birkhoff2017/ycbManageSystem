@@ -135,6 +135,12 @@
                 align: 'center',
                 editable: false,
                 hidden: true
+            }, {
+                label: '备注',
+                name: 'note',
+                width: 120,
+                align: 'center',
+                editable: true
             }],
             editurl: WEB_ROOT + '/admin//station/station/edit',
             editrulesurl: WEB_ROOT + '/admin/util/validate?clazz=${clazz}',

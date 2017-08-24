@@ -3,10 +3,14 @@ package s2jh.biz.station.web;
 import com.fasterxml.jackson.annotation.JsonView;
 import lab.s2jh.core.annotation.MenuData;
 import lab.s2jh.core.annotation.MetaData;
+import lab.s2jh.core.pagination.GroupPropertyFilter;
+import lab.s2jh.core.pagination.PropertyFilter;
 import lab.s2jh.core.service.BaseService;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.json.JsonViews;
 import lab.s2jh.core.web.view.OperationResult;
+import lab.s2jh.support.service.SocketService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +21,8 @@ import s2jh.biz.station.entity.Battery;
 import s2jh.biz.station.service.BatteryService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
 
 @MetaData("业务模块:充电宝电池管理")
 @Controller
@@ -25,6 +31,9 @@ public class BatteryController extends BaseController<Battery, Long> {
 
     @Autowired
     private BatteryService batteryService;
+
+    @Autowired
+    private SocketService socketService;
 
     @Override
     protected BaseService<Battery, Long> getEntityService() {
@@ -74,5 +83,23 @@ public class BatteryController extends BaseController<Battery, Long> {
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {
         return super.delete(ids);
+    }
+
+    @RequiresPermissions("业务模块:手动弹出电池")
+    @RequestMapping(value = "/popup", method = RequestMethod.POST)
+    @ResponseBody
+    public void popup(@RequestParam("ids") Long... ids) throws IOException {
+        GroupPropertyFilter groupPropertyFilter = GroupPropertyFilter.buildDefaultAndGroupFilter();
+        groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.IN, "id", ids));
+        List<Battery> batteryList = batteryService.findByFilters(groupPropertyFilter);
+        if (CollectionUtils.isNotEmpty(batteryList)) {
+            for (Battery battery : batteryList) {
+                String mac = battery.getStation().getMac();
+                Integer slot = battery.getSlot();
+                String cmd = "ACT:popup;EVENT_CODE:55;MAC:" + mac + ";SLOT:" + slot + "\r\n";
+                socketService.SendCmd(cmd);
+            }
+        }
+
     }
 }

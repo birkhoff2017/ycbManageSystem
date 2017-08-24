@@ -149,6 +149,12 @@
                 align: 'center',
                 editable: false,
                 hidden: true
+            }, {
+                label: '备注',
+                name: 'note',
+                width: 120,
+                align: 'center',
+                editable: true
             }],
             postData: {
                 "search['FETCH_station']": "LEFT"
@@ -156,7 +162,25 @@
             editurl: WEB_ROOT + '/admin//station/battery/edit',
             editrulesurl: WEB_ROOT + '/admin/util/validate?clazz=${clazz}',
             delurl: WEB_ROOT + '/admin/station/battery/delete',
-            fullediturl: WEB_ROOT + '/admin/station/battery/edit-tabs'
+            fullediturl: WEB_ROOT + '/admin/station/battery/edit-tabs',
+            operations: function (itemArray) {
+                var $select = $('<li data-position="multi" data-toolbar="show"><a href="javascript:;"><i class="fa fa-print"></i>手动弹出电池</a></li>');
+                $select.children("a").bind("click", function (e) {
+                    alert("请确认是否要弹出电池！");
+                    loading = true;
+                    e.preventDefault();
+                    var $grid = $(this).closest(".ui-jqgrid").find(".ui-jqgrid-btable:first");
+                    var url = WEB_ROOT + "/admin/station/battery/popup?ids=";
+                    var rowDatas = $grid.jqGrid("getSelectedRowdatas");
+                    for (i = 0; i < rowDatas.length; i++) {
+                        var rowData = rowDatas[i];
+                        url += rowData['id'] + ",";
+                    }
+                    $.post(url, "", function () {
+                    });
+                });
+                itemArray.push($select);
+            },
         });
     });
 </script>

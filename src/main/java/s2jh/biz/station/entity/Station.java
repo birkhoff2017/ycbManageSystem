@@ -95,4 +95,7 @@ public class Station extends BaseNativeEntity {
     @Column(name = "last_power_off_time")
     private Date lastPowerOffTime;
 
+    @MetaData("备注")
+    @Column(name = "note")
+    private String note;
 }

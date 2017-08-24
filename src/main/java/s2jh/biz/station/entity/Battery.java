@@ -42,7 +42,7 @@ public class Battery extends BaseNativeEntity {
     @MetaData("最近所属订单")
     //@OneToOne(fetch = FetchType.LAZY)
     @Column(name = "orderid")
-    private String orderLog;
+    private String orderid;
 
     // 0：正常;3,4：锁住
     @MetaData("电池状态")
@@ -113,4 +113,7 @@ public class Battery extends BaseNativeEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastBackTime;
 
+    @MetaData("备注")
+    @Column(name = "note")
+    private String note;
 }
