@@ -26,25 +26,25 @@ public class Message extends BaseNativeEntity {
 
     private static final long serialVersionUID = -6311575125667643141L;
 
-    @MetaData("openid")
+    @MetaData("用户openid")
     @Column(name = "openid")
     private String openid;
 
     //form_id或prepay_id
-    @MetaData("form_prepay_id")
+    @MetaData("form_id")
     @Column(name = "form_prepay_id")
     private String form_prepay_id;
 
-    @MetaData("type") // 1为form_id, 2为prepay_id
+    @MetaData("类型") // 1为form_id, 2为prepay_id
     @Column(name = "type")
     private Integer type;
 
-    @MetaData("orderid")
+    @MetaData("订单编号")
     @Column(name = "orderid")
     private String orderid;
 
     //次数  form_id只能使用一次，prepay_id可以使用三次
-    @MetaData("number")
+    @MetaData("剩余次数")
     @Column(name = "number")
     private Integer number;
 
