@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import s2jh.biz.feeStrategy.entity.FeeStrategy;
 import s2jh.biz.station.entity.Station;
 
 import javax.persistence.*;
@@ -62,8 +63,9 @@ public class ShopStation extends BaseNativeEntity {
     private String latitude;
 
     @MetaData("费用设置")
-    @Column(name = "fee_settings")
-    private Integer feeSettings;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fee_settings")
+    private FeeStrategy feeSettings;
 
     @MetaData("销售")
     @OneToOne(fetch = FetchType.LAZY)

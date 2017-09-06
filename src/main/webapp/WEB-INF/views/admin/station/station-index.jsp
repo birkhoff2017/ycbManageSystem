@@ -40,7 +40,7 @@
         $("#grid-station-station-index").data("gridOptions", {
             url: WEB_ROOT + '/admin/station/station/list',
             colModel: [{
-                label: '设备ID',
+                label: '机器ID',
                 name: 'id',
                 width: 100,
                 hidden: false
@@ -56,6 +56,17 @@
                 width: 120,
                 align: 'center',
                 editable: false
+            }, {
+                label : '网络状态',
+                name : 'netStatus',
+                align : 'center',
+                width : 50,
+                formatter: 'select',
+                searchoptions: {
+                    value: Util.getCacheDictDatasByType("Station_Net_Status")
+                },
+                editable: false,
+                hidden: true
             }, {
                 label: '可借数',
                 name: 'usable',
@@ -135,6 +146,16 @@
                 align: 'center',
                 editable: false,
                 hidden: true
+            }, {
+                label : '同步策略',
+                name : 'syncSetting',
+                align : 'center',
+                width : 50,
+                formatter: 'select',
+                searchoptions: {
+                    value: Util.getCacheDictDatasByType("Special_Sync_Setting")
+                },
+                editable: true
             }, {
                 label: '备注',
                 name: 'note',

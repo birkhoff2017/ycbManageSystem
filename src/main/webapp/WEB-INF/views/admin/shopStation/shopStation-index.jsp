@@ -107,13 +107,6 @@
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
-		            label : '费用设置',
-		            name : 'feeSettings',
-		            formatter: 'integer',
-                    width : 100,
-                    align : 'center',
-                    editable: true
-		        }, {
 		            label : '销售',
 		            name : 'admin.display',
                     width : 100,
@@ -127,7 +120,14 @@
 		            formatter: 'integer',
                     align : 'center',
 		            editable: true                                                                   
-		        } ],
+		        }, {
+					label : '费用设置',
+					name : 'feeSettings.name',
+					index : 'feeSettings.id',
+					width : 100,
+					align : 'center',
+					editable: true
+				} ],
 		        postData: {
 		           "search['FETCH_shop']" : "LEFT",
 		           "search['FETCH_station']" : "LEFT",

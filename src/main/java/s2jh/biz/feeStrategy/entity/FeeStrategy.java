@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -27,7 +28,7 @@ public class FeeStrategy extends BaseNativeEntity {
     private static final long serialVersionUID = -8444912433694270513L;
 
     @MetaData("策略名称")
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @MetaData("意外借出免费时长")
@@ -69,5 +70,9 @@ public class FeeStrategy extends BaseNativeEntity {
     @MetaData("最高收费金额")
     @Column(name = "max_fee")
     private BigDecimal maxFee;
+
+    @MetaData("租金扣费上限")
+    @Column(name = "deposit_ceiling")
+    private Boolean depositCeiling;
 
 }

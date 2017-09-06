@@ -79,7 +79,7 @@
 		        }, {
 					label : '已退款金额',
 					name : 'refunded',
-					formatter: 'number',
+					formatter: 'currency',
 					editable: true
 				} ],
 		        editurl : WEB_ROOT + '/admin//bizUser/biz-user/edit',

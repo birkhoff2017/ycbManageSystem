@@ -54,6 +54,10 @@ public class Station extends BaseNativeEntity {
     @Column(name = "total")
     private Integer total;
 
+    @MetaData("网络状态")
+    @Column(name = "net_status")
+    private Integer netStatus;
+
     @MetaData("可用电池")
     @Column(name = "usable_battery")
     private String usableBattery;
@@ -76,6 +80,10 @@ public class Station extends BaseNativeEntity {
     @Column(name = "device_ver")
     private Integer deviceVer;
 
+    @MetaData("软件版本")
+    @Column(name = "soft_ver")
+    private Integer softVer;
+
     @MetaData("心跳率")
     @Column(name = "heartbeat_rate")
     private Integer heartbeatRate;
@@ -94,6 +102,10 @@ public class Station extends BaseNativeEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_power_off_time")
     private Date lastPowerOffTime;
+
+    @MetaData("同步策略")
+    @Column(name = "sync_setting")
+    private Integer syncSetting;
 
     @MetaData("备注")
     @Column(name = "note")

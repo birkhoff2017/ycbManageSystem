@@ -45,51 +45,77 @@
 		        }, {
 		            label : '策略名称',
 		            name : 'name',
-		            width : 255,
+		            width : 60,
 		            align : 'center',
 		            editable: true                                                                   
 		        }, {
 		            label : '意外借出免费时长',
 		            name : 'freeTime',
+					width : 60,
 		            editable: true                                                                   
 		        }, {
 		            label : '意外借出免费时长单位',
 		            name : 'freeUnit',
+					width : 60,
+					formatter: 'select',
+					searchoptions: {
+						value: Util.getCacheDictDatasByType("Fee_Strategy_Time_Unit")
+					},
 		            editable: true                                                                   
 		        }, {
 		            label : '固定收费时长',
 		            name : 'fixedTime',
+					width : 60,
 		            editable: true                                                                   
 		        }, {
 		            label : '固定收费时长单位',
 		            name : 'fixedUnit',
+					width : 60,
+					formatter: 'select',
+					searchoptions: {
+						value: Util.getCacheDictDatasByType("Fee_Strategy_Time_Unit")
+					},
 		            editable: true                                                                   
 		        }, {
 		            label : '固定费用',
 		            name : 'fixed',
-		            formatter: 'number',
+					width : 60,
+		            formatter: 'currency',
 		            editable: true                                                                   
 		        }, {
 		            label : '超出计费',
 		            name : 'fee',
-		            formatter: 'number',
+					width : 60,
+		            formatter: 'currency',
 		            editable: true                                                                   
 		        }, {
 		            label : '超出计费时长单位',
 		            name : 'feeUnit',
+					width : 60,
+					formatter: 'select',
+					searchoptions: {
+						value: Util.getCacheDictDatasByType("Fee_Strategy_Time_Unit")
+					},
 		            editable: true                                                                   
 		        }, {
 		            label : '最高收费时长',
 		            name : 'maxFeeTime',
+					width : 60,
 		            editable: true                                                                   
 		        }, {
 		            label : '最高收费时长单位',
 		            name : 'maxFeeUnit',
+					width : 60,
+					formatter: 'select',
+					searchoptions: {
+						value: Util.getCacheDictDatasByType("Fee_Strategy_Time_Unit")
+					},
 		            editable: true                                                                   
 		        }, {
 		            label : '最高收费金额',
 		            name : 'maxFee',
-		            formatter: 'number',
+					width : 60,
+		            formatter: 'currency',
 		            editable: true                                                                   
 		        } ],
 		        editurl : WEB_ROOT + '/admin//feeStrategy/fee-strategy/edit',

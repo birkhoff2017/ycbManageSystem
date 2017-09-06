@@ -115,7 +115,10 @@
                 <div class="form-group">
                     <label class="control-label">费用设置</label>
                     <div class="controls">
-                        <form:input path="feeSettings" class="form-control"/>
+                        <form:hidden path="feeSettings.id" class="form-control" data-select2-type="remote"
+                                     data-url="${ctx}/admin/feeStrategy/fee-strategy/list" data-display="${admin.name}"
+                                     data-query="search['CN_name']"/>
+                        <form:input path="feeSettings.name" class="form-control"/>
                     </div>
                 </div>
             </div>
