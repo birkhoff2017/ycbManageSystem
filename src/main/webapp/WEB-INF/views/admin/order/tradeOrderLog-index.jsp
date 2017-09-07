@@ -84,7 +84,7 @@
                 editable: true
             }, {
                 label: '电池ID',
-                name: 'borrow_battery_rfid',
+                name: 'borrowBattery',
                 width: 100,
                 align: 'center',
                 editable: false
@@ -155,13 +155,13 @@
                 align: 'center',
                 editable: false
             }, {
-                label : '已退款至账户金额',
-                name : 'refunded',
+                label: '提现金额',
+                name: 'refunded',
                 formatter: 'currency',
                 editable: true
             }, {
-                label : '已退款至可用余额',
-                name : 'refundedUsable',
+                label: '已退款至可用余额',
+                name: 'refundedUsable',
                 formatter: 'currency',
                 editable: true
             }, {
