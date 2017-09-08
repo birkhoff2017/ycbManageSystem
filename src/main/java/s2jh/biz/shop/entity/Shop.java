@@ -9,6 +9,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created by zhuhui on 17-7-24.
@@ -76,6 +77,14 @@ public class Shop extends BaseNativeEntity {
     @MetaData("状态")
     @Column(name = "status")
     private Integer status;
+
+    @MetaData("押金")
+    @Column(name = "defaultPay")
+    private BigDecimal defaultPay;
+
+    @MetaData("可直接支付差额")
+    @Column(name = "atLeatValue")
+    private BigDecimal atLeatValue;
 
 
 }

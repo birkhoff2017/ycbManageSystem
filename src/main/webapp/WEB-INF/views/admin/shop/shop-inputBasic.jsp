@@ -26,7 +26,7 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
-						<label class="control-label">商铺名</label>
+						<label class="control-label">店铺名</label>
 						<div class="controls">
 			                <form:input path="name" class="form-control"/>
 						</div>
@@ -96,6 +96,26 @@
 	        <div class="row">
 	            <div class="col-md-6">
 					<div class="form-group">
+						<label class="control-label">营业开始时间</label>
+						<div class="controls">
+			                <form:input path="stime" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">营业结束时间</label>
+						<div class="controls">
+			                <form:input path="etime" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
 						<label class="control-label">logo</label>
 						<div class="controls">
 			                <form:input path="logo" class="form-control"/>
@@ -129,6 +149,26 @@
 						<label class="control-label">状态</label>
 						<div class="controls">
 			                <form:input path="status" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">押金</label>
+						<div class="controls">
+			                <form:input path="defaultPay" class="form-control"/>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">可直接支付差额</label>
+						<div class="controls">
+			                <form:input path="atLeatValue" class="form-control"/>
 						</div>
 					</div>
 	            </div>
