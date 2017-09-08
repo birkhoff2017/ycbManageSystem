@@ -127,12 +127,6 @@
                 formatter: 'integer',
                 editable: true
             }, {
-                label: '设备名',
-                name: 'title',
-                width: 120,
-                align: 'center',
-                editable: true
-            }, {
                 label: '通信模块',
                 name: 'route',
                 width: 40,
