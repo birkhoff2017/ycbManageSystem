@@ -32,7 +32,7 @@ public class Battery extends BaseNativeEntity {
 
     @MetaData("所在设备")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stationid")
+    @JoinColumn(name = "stationid", referencedColumnName = "sid")
     private Station station;
 
     @MetaData("所在设备槽位")

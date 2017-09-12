@@ -41,9 +41,11 @@
             url: WEB_ROOT + '/admin/station/station/list',
             colModel: [{
                 label: '机器ID',
-                name: 'id',
+                name: 'sid',
                 width: 100,
-                hidden: false
+                align: 'center',
+                hidden: false,
+                editable: true
             },  {
                 label: '设备名',
                 name: 'title',

@@ -79,12 +79,12 @@ public class TradeOrderLog extends BaseNativeEntity {
 
     @MetaData("借出设备id")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "borrow_station_id")
+    @JoinColumn(name = "borrow_station_id", referencedColumnName = "sid")
     private Station borrowStation;
 
     @MetaData("归还设备id")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "return_station_id")
+    @JoinColumn(name = "return_station_id", referencedColumnName = "sid")
     private Station returnStation;
 
     @MetaData("借出商铺站点id")
@@ -105,13 +105,13 @@ public class TradeOrderLog extends BaseNativeEntity {
     @Column(name = "cable")
     private String cable;
 
-//    @MetaData("借出时所在城市")
-//    @Column(name = "borrow_city")
-//    private String borrowCity;
+    @MetaData("借出时所在城市")
+    @Column(name = "borrow_city")
+    private String borrowCity;
 
-//    @MetaData("归还时所在城市")
-//    @Column(name = "return_city")
-//    private String returnCity;
+    @MetaData("归还时所在城市")
+    @Column(name = "return_city")
+    private String returnCity;
 
     @MetaData("订单价格")
     @Column(name = "price", precision = 8, scale = 2)

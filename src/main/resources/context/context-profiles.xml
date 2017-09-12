@@ -153,7 +153,7 @@
 			<property name="locations">
 				<list>
 					<value>classpath:/application.properties</value>
-					<value>classpath:/application-test.properties</value>
+					<!--<value>classpath:/application-test.properties</value>-->
 				</list>
 			</property>
 			<property name="ignoreResourceNotFound" value="true" />

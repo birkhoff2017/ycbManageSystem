@@ -37,13 +37,13 @@ public class BizUserInfoController extends BaseController<BizUserInfo, Long> {
     }
 
     @MenuData("业务模块:客户详情")
-    @RequiresPermissions("客户详情")
+    @RequiresPermissions("业务模块:客户详情")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/bizUser/bizUserInfo-index";
     }
 
-    @RequiresPermissions("客户详情")
+    @RequiresPermissions("业务模块:客户详情")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
@@ -56,20 +56,20 @@ public class BizUserInfoController extends BaseController<BizUserInfo, Long> {
         return "admin/bizUser/bizUserInfo-inputTabs";
     }
 
-    @RequiresPermissions("客户详情")
+    @RequiresPermissions("业务模块:客户详情")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
         return "admin/bizUser/bizUserInfo-inputBasic";
     }
 
-    @RequiresPermissions("客户详情")
+    @RequiresPermissions("业务模块:客户详情")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") BizUserInfo entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("客户详情")
+    @RequiresPermissions("业务模块:客户详情")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {

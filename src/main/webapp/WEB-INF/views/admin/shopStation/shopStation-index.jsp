@@ -43,16 +43,16 @@
 		            name : 'id',
 		            hidden : true                          
 		        }, {
-					label : '关联商铺id',
+					label : '商铺id',
 					name : 'shop.id',
-					index : 'shop.id',
+					index : 'shop',
 					width : 60,
 					align : 'center',
 					editable: true
 				}, {
-					label : '关联设备id',
-					name : 'station.id',
-					index : 'station.id',
+					label : '机器id',
+					name : 'station.sid',
+					index : 'station',
 					width : 60,
 					align : 'center',
 					editable: true
@@ -66,7 +66,7 @@
 		        }, {
 		            label : '关联设备',
 		            name : 'station.title',
-		            index : 'station',
+		            index : 'station.sid',
                     width : 100,
                     align : 'center',
 		            editable: true                                                                   
@@ -129,9 +129,10 @@
 					editable: true
 				} ],
 		        postData: {
-		           "search['FETCH_shop']" : "LEFT",
-		           "search['FETCH_station']" : "LEFT",
-		           "search['FETCH_admin']" : "LEFT"
+					"search['FETCH_shop']" : "LEFT",
+					"search['FETCH_station']" : "LEFT",
+					"search['FETCH_feeSettings']" : "LEFT",
+					"search['FETCH_admin']" : "LEFT"
 		        },
 		        editurl : WEB_ROOT + '/admin//shop/shop-station/edit',
 		        editrulesurl : WEB_ROOT + '/admin/util/validate?clazz=${clazz}',

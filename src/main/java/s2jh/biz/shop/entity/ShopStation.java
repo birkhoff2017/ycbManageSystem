@@ -22,7 +22,7 @@ import javax.persistence.*;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_shop_station")
-@MetaData(value = "商铺站点")
+@MetaData(value = "业务模块:商铺站点")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ShopStation extends BaseNativeEntity {
     private static final long serialVersionUID = -8969639160325119936L;

@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_user")
-@MetaData(value = "客户")
+@MetaData(value = "业务模块:客户")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BizUser extends BaseNativeEntity {
     private static final long serialVersionUID = 4231028228537930521L;

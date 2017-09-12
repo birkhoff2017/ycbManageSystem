@@ -26,6 +26,10 @@ import java.util.Date;
 public class Station extends BaseNativeEntity {
     private static final long serialVersionUID = -7293995948887951079L;
 
+    @MetaData("机器id")
+    @Column(name = "sid")
+    private Long sid;
+
     @MetaData("Mac地址")
     @Column(name = "mac", nullable = false, unique = true)
     private String mac;

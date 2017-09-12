@@ -120,12 +120,12 @@
 		        }, {
 		            label : '押金',
 		            name : 'defaultPay',
-		            formatter: 'number',
+		            formatter: 'currency',
 		            editable: true                                                                   
 		        }, {
 		            label : '可直接支付差额',
 		            name : 'atLeatValue',
-		            formatter: 'number',
+		            formatter: 'currency',
 		            editable: true                                                                   
 		        } ],
 		        editurl : WEB_ROOT + '/admin//shop/shop/edit',

@@ -59,7 +59,7 @@ public class BizUserController extends BaseController<BizUser, Long> {
         return "admin/bizUser/bizUser-index";
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("业务模块:客户管理")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
@@ -72,20 +72,20 @@ public class BizUserController extends BaseController<BizUser, Long> {
         return "admin/bizUser/bizUser-inputTabs";
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("业务模块:客户管理")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
         return "admin/bizUser/bizUser-inputBasic";
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("业务模块:客户管理")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") BizUser entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("客户管理")
+    @RequiresPermissions("业务模块:客户管理")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {

@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="control-label">关联商铺</label>
+                    <label class="control-label">商铺</label>
                     <div class="controls">
                         <form:hidden path="shop.id" class="form-control" data-select2-type="remote"
                                      data-url="${ctx}/admin/shop/shop/list" data-display="${shop.id}"
@@ -40,12 +40,12 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="control-label">关联设备</label>
+                    <label class="control-label">机器</label>
                     <div class="controls">
                         <form:hidden path="station.id" class="form-control" data-select2-type="remote"
-                                     data-url="${ctx}/admin/station/station/list" data-display="${station.title}"
-                                     data-query="search['EQ_id']"/>
-                        <form:input path="station.title" class="form-control"/>
+                                     data-url="${ctx}/admin/station/station/list" data-display="${station.sid}"
+                                     data-query="search['EQ_sid']"/>
+                        <form:input path="station.sid" class="form-control"/>
                     </div>
                 </div>
             </div>

@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_shop")
-@MetaData(value = "商铺")
+@MetaData(value = "业务模块:商铺")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Shop extends BaseNativeEntity {
 

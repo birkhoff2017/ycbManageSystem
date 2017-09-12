@@ -51,9 +51,9 @@
                 editable: false
             }, {
                 label: '所在设备',
-                name: 'station.id',
+                name: 'station.sid',
                 width: 80,
-                index: 'station.id',
+                index: 'station.sid',
                 align: 'center',
                 editable: false
             }, {

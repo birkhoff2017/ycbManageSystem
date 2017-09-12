@@ -36,14 +36,14 @@ public class ShopController extends BaseController<Shop,Long> {
         super.initPrepareModel(request, model, id);
     }
     
-    @MenuData("商铺")
-    @RequiresPermissions("商铺")
+    @MenuData("业务模块:商铺")
+    @RequiresPermissions("业务模块:商铺")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/shop/shop-index";
     }   
     
-    @RequiresPermissions("商铺")
+    @RequiresPermissions("业务模块:商铺")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
@@ -56,20 +56,20 @@ public class ShopController extends BaseController<Shop,Long> {
         return "admin/shop/shop-inputTabs";
     }
 
-    @RequiresPermissions("商铺")
+    @RequiresPermissions("业务模块:商铺")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
         return "admin/shop/shop-inputBasic";
     }
 
-    @RequiresPermissions("商铺")
+    @RequiresPermissions("业务模块:商铺")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") Shop entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("商铺")
+    @RequiresPermissions("业务模块:商铺")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {

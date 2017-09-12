@@ -20,7 +20,7 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_userinfo")
-@MetaData(value = "客户详情")
+@MetaData(value = "业务模块:客户详情")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BizUserInfo extends BaseNativeEntity {
     private static final long serialVersionUID = -2942060905173620483L;

@@ -8,18 +8,6 @@
     <name>ycbManageSystem</name>
     <url>http://maven.apache.org</url>
 
-    <!--<licenses>
-        <license>
-            <name>Apache License</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-        </license>
-    </licenses>-->
-
-    <!--<scm>
-        <connection>https://github.com/xautlx/s2jh.git</connection>
-        <url>https://github.com/xautlx/s2jh</url>
-    </scm>-->
-
     <properties>
         <!-- 主要依赖库的版本定义 -->
         <s2jh.version>0.0.1-SNAPSHOT</s2jh.version>
@@ -59,7 +47,7 @@
 
         <!-- Plugin的属性定义 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.6</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <deploy_env>local</deploy_env>
 
         <maven.build.timestamp.format>MM-dd_HH:mm:ss</maven.build.timestamp.format>
@@ -122,20 +110,6 @@
             <version>${mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>${oracle.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc</artifactId>
-            <version>4.0.2206.100</version>
-            <scope>runtime</scope>
-        </dependency>
-        -->
         <!-- datasource pool -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -143,7 +117,6 @@
             <version>1.0.9</version>
             <scope>runtime</scope>
         </dependency>
-
         <!-- WEB begin -->
         <!-- spring mvc -->
         <dependency>
@@ -156,7 +129,6 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
         <!-- j2ee web spec -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -175,14 +147,12 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.sitemesh</groupId>
             <artifactId>sitemesh</artifactId>
             <version>${sitemesh.version}</version>
         </dependency>
         <!-- WEB end -->
-
         <!-- SPRING basic begin(一般不需要显式定义) -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -232,7 +202,6 @@
             <version>${spring.version}</version>
         </dependency>
         <!-- SPRING basic end -->
-
         <!-- PERSISTENCE begin -->
         <!-- hibernate -->
         <dependency>
@@ -260,7 +229,6 @@
             <artifactId>hibernate-envers</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-
         <!-- http://docs.jboss.org/hibernate/search/5.3/reference/en-US/ -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -288,7 +256,6 @@
             <artifactId>hibernate-search-backend-jgroups</artifactId>
             <version>${hibernate-search.version}</version>
         </dependency>
-
         <!-- spring data jpa -->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -301,7 +268,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <!-- mybatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -313,7 +279,6 @@
             <artifactId>mybatis-spring</artifactId>
             <version>1.2.2</version>
         </dependency>
-
         <!-- AOP begin -->
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -336,14 +301,12 @@
             <version>3.3.1</version>
         </dependency>
         <!-- AOP end -->
-
         <!-- template engine -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>
         </dependency>
-
         <!-- email -->
         <dependency>
             <groupId>javax.mail</groupId>
@@ -355,7 +318,6 @@
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
         </dependency>
-
         <!-- ehcache -->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
@@ -369,7 +331,6 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
         </dependency>
-
         <!-- Security begin -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -387,7 +348,6 @@
             <version>2.4.2.1-RELEASE</version>
         </dependency>
         <!-- Security end -->
-
         <!-- Redis -->
         <dependency>
             <groupId>redis.clients</groupId>
@@ -413,7 +373,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <!-- UTILS begin -->
         <!-- For kindeditor -->
         <dependency>
@@ -421,7 +380,6 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-
         <!-- JSON begin -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -434,7 +392,6 @@
             <version>${jackson.version}</version>
         </dependency>
         <!-- JSON end -->
-
         <!-- GENERAL UTILS begin -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -466,21 +423,18 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
         </dependency>
-
         <!-- google java library -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-
         <!-- joda -->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.2</version>
         </dependency>
-
         <!-- XML begin -->
         <dependency>
             <groupId>dom4j</groupId>
@@ -505,7 +459,6 @@
             <version>1.1.4</version>
         </dependency>
         <!-- XML end -->
-
         <dependency>
             <groupId>com.octo.captcha</groupId>
             <artifactId>jcaptcha</artifactId>
@@ -533,7 +486,6 @@
             <version>2.8.1</version>
         </dependency>
         <!-- UTILS end -->
-
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -544,7 +496,6 @@
             <artifactId>javase</artifactId>
             <version>2.1</version>
         </dependency>
-
         <!-- jasperreports
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -658,7 +609,6 @@
             <version>2.5.0</version>
         </dependency>
         -->
-
         <!-- Excel Support -->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -696,7 +646,6 @@
             <version>2.6</version>
             <scope>compile</scope>
         </dependency>
-
         <!-- LOGGING begin -->
         <!-- slf4j -->
         <dependency>
@@ -709,7 +658,6 @@
             <artifactId>logback-classic</artifactId>
             <version>1.0.7</version>
         </dependency>
-
         <!-- common-logging 实际调用slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -717,7 +665,6 @@
             <version>${slf4j.version}</version>
             <scope>runtime</scope>
         </dependency>
-
         <!-- java.util.logging 实际调用slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -725,7 +672,6 @@
             <version>${slf4j.version}</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
@@ -733,7 +679,6 @@
             <scope>runtime</scope>
         </dependency>
         <!-- LOGGING end -->
-
         <!-- TIMER -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -749,13 +694,11 @@
         <!-- Quartz Plugin <dependency> <groupId>org.quartz-scheduler</groupId> <artifactId>quartz-oracle</artifactId> <version>${quartz.version}</version>
             </dependency> <dependency> <groupId>org.quartz-scheduler</groupId> <artifactId>quartz-weblogic</artifactId> <version>${quartz.version}</version>
             </dependency> -->
-
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${httpcomponents.version}</version>
         </dependency>
-
         <!-- activiti -->
         <dependency>
             <groupId>org.activiti</groupId>
@@ -767,7 +710,6 @@
             <artifactId>activiti-spring</artifactId>
             <version>${activiti.version}</version>
         </dependency>
-
         <!-- TEST begin -->
         <dependency>
             <groupId>junit</groupId>
@@ -787,14 +729,12 @@
             <version>0.9.0</version>
             <scope>test</scope>
         </dependency>
-
         <!-- 辅助用于解析开发的markdown格式文档文件到html显示 -->
         <dependency>
             <groupId>org.commonjava.googlecode.markdown4j</groupId>
             <artifactId>markdown4j</artifactId>
             <version>2.2-cj-1.0</version>
         </dependency>
-
         <!-- http://projectlombok.org/ -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -802,7 +742,6 @@
             <version>1.16.2</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- jetty standard runtime-->
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
@@ -829,8 +768,6 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-
     <!-- 插件配置 -->
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -886,12 +823,11 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.1</version>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
-
                 <!-- resource插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -902,7 +838,6 @@
                         <overwrite>true</overwrite>
                     </configuration>
                 </plugin>
-
                 <!-- test插件, 仅测试名称为*Test的类 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -917,7 +852,6 @@
                         </excludes>
                     </configuration>
                 </plugin>
-
                 <!-- war打包插件, 设定war包名称不带版本号 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -927,7 +861,6 @@
                         <warName>${project.artifactId}</warName>
                     </configuration>
                 </plugin>
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -942,7 +875,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
     <profiles>
         <profile>
             <id>standalone</id>
