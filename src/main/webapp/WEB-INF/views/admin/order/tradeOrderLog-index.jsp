@@ -103,7 +103,7 @@
                 editable: false
             }, {
                 label: '借出设备id',
-                name: 'borrowStation.id',
+                name: 'borrowStation.sid',
                 index: 'borrowStation',
                 align: 'center',
                 width: 100,
@@ -136,7 +136,7 @@
                 editable: false
             }, {
                 label: '归还设备id',
-                name: 'returnStation.id',
+                name: 'returnStation.sid',
                 index: 'returnStation',
                 align: 'center',
                 width: 100,
