@@ -26,7 +26,7 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_tradelog")
-@MetaData(value = "业务模块:订单表")
+@MetaData(value = "业务模块:订单")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class TradeOrderLog extends BaseNativeEntity {
 

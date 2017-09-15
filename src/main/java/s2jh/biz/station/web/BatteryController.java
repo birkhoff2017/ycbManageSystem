@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
-@MetaData("业务模块:充电宝电池管理")
+@MetaData("业务模块:电池管理")
 @Controller
 @RequestMapping(value = "/admin/station/battery")
 public class BatteryController extends BaseController<Battery, Long> {
@@ -45,14 +45,14 @@ public class BatteryController extends BaseController<Battery, Long> {
         super.initPrepareModel(request, model, id);
     }
 
-    @MenuData("业务模块:充电宝电池")
-    @RequiresPermissions("业务模块:充电宝电池")
+    @MenuData("业务模块:电池")
+    @RequiresPermissions("业务模块:电池")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/station/battery-index";
     }
 
-    @RequiresPermissions("业务模块:充电宝电池")
+    @RequiresPermissions("业务模块:电池")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
@@ -65,20 +65,20 @@ public class BatteryController extends BaseController<Battery, Long> {
         return "admin/station/battery-inputTabs";
     }
 
-    @RequiresPermissions("业务模块:充电宝电池")
+    @RequiresPermissions("业务模块:电池")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
         return "admin/station/battery-inputBasic";
     }
 
-    @RequiresPermissions("业务模块:充电宝电池")
+    @RequiresPermissions("业务模块:电池")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") Battery entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("业务模块:充电宝电池")
+    @RequiresPermissions("业务模块:电池")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {

@@ -18,7 +18,7 @@ import s2jh.biz.station.service.StationService;
 
 import javax.servlet.http.HttpServletRequest;
 
-@MetaData("设备表管理")
+@MetaData("设备管理")
 @Controller
 @RequestMapping(value = "/admin/station/station")
 public class StationController extends BaseController<Station, Long> {
@@ -36,14 +36,14 @@ public class StationController extends BaseController<Station, Long> {
         super.initPrepareModel(request, model, id);
     }
 
-    @MenuData("业务模块:设备表")
-    @RequiresPermissions("业务模块:设备表")
+    @MenuData("业务模块:设备")
+    @RequiresPermissions("业务模块:设备")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/station/station-index";
     }
 
-    @RequiresPermissions("业务模块:设备表")
+    @RequiresPermissions("业务模块:设备")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
@@ -56,20 +56,20 @@ public class StationController extends BaseController<Station, Long> {
         return "admin/station/station-inputTabs";
     }
 
-    @RequiresPermissions("业务模块:设备表")
+    @RequiresPermissions("业务模块:设备")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
         return "admin/station/station-inputBasic";
     }
 
-    @RequiresPermissions("业务模块:设备表")
+    @RequiresPermissions("业务模块:设备")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") Station entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("业务模块:设备表")
+    @RequiresPermissions("业务模块:设备")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {

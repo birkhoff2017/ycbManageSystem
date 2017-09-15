@@ -7,6 +7,8 @@ import lab.s2jh.core.service.BaseService;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.json.JsonViews;
 import lab.s2jh.core.web.view.OperationResult;
+import lab.s2jh.module.auth.entity.User;
+import lab.s2jh.module.auth.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import s2jh.biz.feeStrategy.entity.FeeStrategy;
+import s2jh.biz.feeStrategy.service.FeeStrategyService;
 import s2jh.biz.shop.entity.Shop;
 import s2jh.biz.shop.entity.ShopStation;
 import s2jh.biz.shop.service.ShopService;
@@ -37,6 +41,12 @@ public class ShopStationController extends BaseController<ShopStation, Long> {
     @Autowired
     private ShopService shopService;
 
+    @Autowired
+    private FeeStrategyService feeStrategyService;
+
+    @Autowired
+    private UserService userService;
+
     @Override
     protected BaseService<ShopStation, Long> getEntityService() {
         return shopStationService;
@@ -49,6 +59,12 @@ public class ShopStationController extends BaseController<ShopStation, Long> {
         }
         if (!StringUtils.isEmpty(request.getParameter("shop.id"))) {
             model.addAttribute("shopid", request.getParameter("shop.id"));
+        }
+        if (!StringUtils.isEmpty(request.getParameter("feeSettings.id"))) {
+            model.addAttribute("feeSettingsid", request.getParameter("feeSettings.id"));
+        }
+        if (!StringUtils.isEmpty(request.getParameter("admin.id"))) {
+            model.addAttribute("adminid", request.getParameter("admin.id"));
         }
         super.initPrepareModel(request, model, id);
     }
@@ -88,14 +104,26 @@ public class ShopStationController extends BaseController<ShopStation, Long> {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") ShopStation entity, Model model) {
-        Station station = stationService.findFirstByProperty("sid", Long.valueOf(model.asMap().get("stationsid").toString()));
-        if (station != null) {
-            entity.setStation(station);
+        Station station = null;
+        Shop shop = null;
+        FeeStrategy feeStrategy = null;
+        User admin = null;
+        if (null != model.asMap().get("stationsid")) {
+            station = stationService.findFirstByProperty("sid", Long.valueOf(model.asMap().get("stationsid").toString()));
         }
-        Shop shop = shopService.findOne(Long.valueOf(model.asMap().get("shopid").toString()));
-        if (shop != null) {
-            entity.setShop(shop);
+        if (null != model.asMap().get("shopid")) {
+            shop = shopService.findOne(Long.valueOf(model.asMap().get("shopid").toString()));
         }
+        if (null != model.asMap().get("feeSettingsid")) {
+            feeStrategy = feeStrategyService.findOne(Long.valueOf(model.asMap().get("feeSettingsid").toString()));
+        }
+        if (null != model.asMap().get("adminid")) {
+            admin = userService.findOne(Long.valueOf(model.asMap().get("adminid").toString()));
+        }
+        entity.setStation(station);
+        entity.setShop(shop);
+        entity.setFeeSettings(feeStrategy);
+        entity.setAdmin(admin);
         return super.editSave(entity);
     }
 

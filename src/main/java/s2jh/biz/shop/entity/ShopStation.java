@@ -28,13 +28,13 @@ public class ShopStation extends BaseNativeEntity {
     private static final long serialVersionUID = -8969639160325119936L;
 
     @MetaData("关联商铺")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "shopid")
     private Shop shop;
 
     @MetaData("关联设备")
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id")
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "station_id", referencedColumnName = "sid")
     private Station station;
 
     @MetaData("设备码")
@@ -63,12 +63,12 @@ public class ShopStation extends BaseNativeEntity {
     private String latitude;
 
     @MetaData("费用设置")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "fee_settings")
     private FeeStrategy feeSettings;
 
     @MetaData("销售")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "seller_id")
     private User admin;
 

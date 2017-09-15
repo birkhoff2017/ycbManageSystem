@@ -18,7 +18,7 @@ import s2jh.biz.order.service.TradeOrderLogService;
 
 import javax.servlet.http.HttpServletRequest;
 
-@MetaData("业务模块:订单表管理")
+@MetaData("业务模块:订单管理")
 @Controller
 @RequestMapping(value = "/admin/order/trade-order-log")
 public class TradeOrderLogController extends BaseController<TradeOrderLog, Long> {
@@ -36,14 +36,14 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
         super.initPrepareModel(request, model, id);
     }
 
-    @MenuData("业务模块:订单表")
-    @RequiresPermissions("业务模块:订单表")
+    @MenuData("业务模块:订单")
+    @RequiresPermissions("业务模块:订单")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         return "admin/order/tradeOrderLog-index";
     }
 
-    @RequiresPermissions("业务模块:订单表")
+    @RequiresPermissions("业务模块:订单")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     @JsonView(JsonViews.Admin.class)
@@ -56,20 +56,20 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
         return "admin/order/tradeOrderLog-inputTabs";
     }
 
-    @RequiresPermissions("业务模块:订单表")
+    @RequiresPermissions("业务模块:订单")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editShow(Model model) {
         return "admin/order/tradeOrderLog-inputBasic";
     }
 
-    @RequiresPermissions("业务模块:订单表")
+    @RequiresPermissions("业务模块:订单")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult editSave(@ModelAttribute("entity") TradeOrderLog entity, Model model) {
         return super.editSave(entity);
     }
 
-    @RequiresPermissions("业务模块:订单表")
+    @RequiresPermissions("业务模块:订单")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {

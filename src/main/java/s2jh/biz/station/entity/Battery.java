@@ -20,7 +20,7 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_battery")
-@MetaData(value = "业务模块:充电宝电池")
+@MetaData(value = "业务模块:电池")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Battery extends BaseNativeEntity {
 

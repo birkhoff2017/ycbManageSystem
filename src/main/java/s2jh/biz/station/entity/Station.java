@@ -21,7 +21,7 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_station")
-@MetaData(value = "业务模块:设备表")
+@MetaData(value = "业务模块:设备")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Station extends BaseNativeEntity {
     private static final long serialVersionUID = -7293995948887951079L;
@@ -69,11 +69,6 @@ public class Station extends BaseNativeEntity {
     @MetaData("槽位状态")
     @Column(name = "slotstatus")
     private String slotstatus;
-
-    // "2:安卓苹果二合一线 3:TypeC线"
-//    @MetaData("线类型")
-//    @Column(name = "cable")
-//    private Integer cable;
 
     @MetaData("设备名")
     @Column(name = "title")

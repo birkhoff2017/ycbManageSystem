@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Access(AccessType.FIELD)
 @Entity
 @Table(name = "ycb_mcs_message")
-@MetaData(value = "业务模块:推送消息")
+@MetaData(value = "业务模块:消息推送")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Message extends BaseNativeEntity {
 
