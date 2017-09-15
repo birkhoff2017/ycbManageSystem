@@ -96,10 +96,9 @@ public class BatteryController extends BaseController<Battery, Long> {
             for (Battery battery : batteryList) {
                 String mac = battery.getStation().getMac();
                 Integer slot = battery.getSlot();
-                String cmd = "ACT:popup;EVENT_CODE:55;MAC:" + mac + ";SLOT:" + slot + "\r\n";
+                String cmd = "ACT:popup;EVENT_CODE:55;STATION:" + battery.getStation().getSid() + ";MAC:" + mac + ";SLOT:" + slot + "\r\n";
                 socketService.SendCmd(cmd);
             }
         }
-
     }
 }

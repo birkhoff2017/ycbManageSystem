@@ -41,7 +41,7 @@
 		        colModel : [ {
 		            label : '流水号',
 		            name : 'id',
-		            hidden : true                          
+		            hidden : false
 		        }, {
 		            label : '策略名称',
 		            name : 'name',

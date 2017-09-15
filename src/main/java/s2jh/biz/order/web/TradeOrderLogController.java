@@ -3,12 +3,16 @@ package s2jh.biz.order.web;
 import com.fasterxml.jackson.annotation.JsonView;
 import lab.s2jh.core.annotation.MenuData;
 import lab.s2jh.core.annotation.MetaData;
+import lab.s2jh.core.pagination.GroupPropertyFilter;
+import lab.s2jh.core.pagination.PropertyFilter;
 import lab.s2jh.core.service.BaseService;
 import lab.s2jh.core.web.BaseController;
 import lab.s2jh.core.web.json.JsonViews;
 import lab.s2jh.core.web.view.OperationResult;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,8 @@ import s2jh.biz.order.entity.TradeOrderLog;
 import s2jh.biz.order.service.TradeOrderLogService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
 
 @MetaData("业务模块:订单管理")
 @Controller
@@ -25,6 +31,21 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
 
     @Autowired
     private TradeOrderLogService tradeOrderLogService;
+
+    @Value("${appID}")
+    private String appID;
+
+    @Value("${appSecret}")
+    private String appSecret;
+
+    @Value("${mch_id}")
+    private String mchId;
+
+    @Value("${key}")
+    private String key;
+
+    @Value("${wxRefundTemplateId}")
+    private String wxRefundTemplateId;
 
     @Override
     protected BaseService<TradeOrderLog, Long> getEntityService() {
@@ -74,5 +95,19 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
     @ResponseBody
     public OperationResult delete(@RequestParam("ids") Long... ids) {
         return super.delete(ids);
+    }
+
+    @RequiresPermissions("业务模块:管理员手动退款")
+    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    @ResponseBody
+    public void refund(@RequestParam("ids") Long... ids) throws IOException {
+        GroupPropertyFilter groupPropertyFilter = GroupPropertyFilter.buildDefaultAndGroupFilter();
+        groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.IN, "id", ids));
+        List<TradeOrderLog> orderLogList = tradeOrderLogService.findByFilters(groupPropertyFilter);
+        if (CollectionUtils.isNotEmpty(orderLogList)) {
+            for (TradeOrderLog order : orderLogList) {
+
+            }
+        }
     }
 }
