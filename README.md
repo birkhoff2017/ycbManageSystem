@@ -17,3 +17,7 @@
 ### 数据字典问题
 将util.js 的getCacheDictDatasByType 方法url修正 /pub/data!dictDatas.json-> /pub/data/dictDatas
 同时在controller中添加接口
+## 打包注意事项
+<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+在向服务器打包时加上，本地调试时 注释掉
+application.properties 

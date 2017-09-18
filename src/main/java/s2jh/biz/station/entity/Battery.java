@@ -61,7 +61,7 @@ public class Battery extends BaseNativeEntity {
     // type-c线：3 6 9 12(C) 15(F)
     @MetaData("充电线类型")
     @Column(name = "cable")
-    private Integer cable;
+    private String cable;
 
     @MetaData("电量")
     @Column(name = "power")
