@@ -21,6 +21,7 @@
 			<property name="locations">
 				<list>
 					<value>classpath*:/application.properties</value>
+					<value>classpath*:/redis-config.properties</value>
 				</list>
 			</property>
 			<property name="ignoreResourceNotFound" value="true" />
@@ -72,6 +73,7 @@
 			<property name="locations">
 				<list>
 					<value>classpath*:/application.properties</value>
+					<value>classpath*:/redis-config.properties</value>
 					<!--<value>classpath*:/application.prd.properties</value>-->
 					<value>classpath*:/build.filter.properties</value>
 					<value>file:/data/showcase/config/s2jh4net.properties</value>
@@ -153,6 +155,7 @@
 			<property name="locations">
 				<list>
 					<value>classpath:/application.properties</value>
+					<value>classpath*:/redis-config.properties</value>
 					<!--<value>classpath:/application-test.properties</value>-->
 				</list>
 			</property>
