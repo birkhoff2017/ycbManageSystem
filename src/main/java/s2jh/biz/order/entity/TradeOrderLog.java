@@ -133,4 +133,12 @@ public class TradeOrderLog extends BaseNativeEntity {
     @Column(name = "paid")
     private BigDecimal paid;
 
+    @MetaData("信用借还的订单号")
+    @Column(name = "order_no")
+    private String orderNo;
+
+    @MetaData("支付宝的资金流水号")
+    @Column(name = "alipay_fund_order_no")
+    private String alipayFundOrderNo;
+
 }
