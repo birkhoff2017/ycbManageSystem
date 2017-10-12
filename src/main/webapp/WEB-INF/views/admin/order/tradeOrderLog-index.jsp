@@ -186,7 +186,19 @@
                 formatter: 'timestamp',
                 width: 130,
                 editable: false
-            }],
+            }, {
+                label : '信用借还的订单号',
+                name : 'orderNo',
+                width : 150,
+                align : 'center',
+                editable: false
+            }, {
+                label : '支付宝的资金流水号',
+                name : 'alipayFundOrderNo',
+                width : 150,
+                align : 'center',
+                editable: false
+            } ],
             postData: {
                 "search['FETCH_bizUser']": "INNER",
                 "search['FETCH_borrowShop']": "LEFT",
