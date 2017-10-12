@@ -1,12 +1,6 @@
 package lab.s2jh.support.web;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.google.common.collect.Lists;
 import lab.s2jh.core.annotation.MenuData;
 import lab.s2jh.core.annotation.MetaData;
 import lab.s2jh.core.cons.GlobalConstant;
@@ -31,7 +25,6 @@ import lab.s2jh.module.sys.service.UserMessageService;
 import lab.s2jh.module.sys.vo.NavMenuVO;
 import lab.s2jh.support.service.DynamicConfigService;
 import lab.s2jh.support.service.MailService;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -42,14 +35,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -137,7 +130,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/password/reset", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult resetPasswordSave(HttpServletRequest request, HttpServletResponse response, @RequestParam("uid") String uid,
-            @RequestParam("code") String code, @RequestParam("newpasswd") String newpasswd, RedirectAttributes redirectAttributes) throws IOException {
+                                             @RequestParam("code") String code, @RequestParam("newpasswd") String newpasswd, RedirectAttributes redirectAttributes) throws IOException {
         User user = userService.findByAuthTypeAndAuthUid(AuthTypeEnum.SYS, uid);
         if (user != null) {
             if (code.equals(user.getUserExt().getRandomCode())) {
@@ -161,15 +154,38 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/signup", method = RequestMethod.POST)
     @ResponseBody
-    public OperationResult signupSave(HttpServletRequest request, @RequestParam("captcha") String captcha) {
+    public OperationResult signupSave(HttpServletRequest request, @RequestParam("captcha") String captcha
+            , @RequestParam("signinid") String signinid, @RequestParam("password") String password
+            , @RequestParam("rpassword") String rpassword, @RequestParam("email") String email) {
         if (!ImageCaptchaServlet.validateResponse(request, captcha)) {
             return OperationResult.buildFailureResult("验证码不正确，请重新输入");
         }
         if (dynamicConfigService.getBoolean(GlobalConstant.cfg_signup_disabled, false)) {
             return OperationResult.buildFailureResult("系统暂未开发账号注册功能，如有疑问请联系管理员");
         }
-        //TODO 
-        return OperationResult.buildSuccessResult("注册成功。需要等待管理员审批通过后方可登录系统。");
+        signinid = signinid.trim();
+        if (signinid.length() < 3) {
+            return OperationResult.buildFailureResult("用户名长度不能小于3位");
+        } else if (this.userService.findByProperty("signinid", signinid) != null) {
+            return OperationResult.buildFailureResult("注册账号:" + signinid + " 已被注册使用，请修改使用其他账号");
+        } else {
+            password = password.trim();
+            if (password.length() < 3) {
+                return OperationResult.buildFailureResult("密码长度不能小于3位");
+            } else {
+                if (StringUtils.isNotBlank(email)) {
+                    if (this.userService.findByProperty("email", email) != null) {
+                        return OperationResult.buildFailureResult("注册邮件:" + email + " 已被注册使用，请修改使用其他电子邮件");
+                    }
+                }
+                User user = new User();
+                user.setAuthUid(signinid);
+                user.setPassword(passwordService.entryptPassword(password, signinid));
+                user.setEmail(email);
+                this.userService.save(user);
+                return OperationResult.buildSuccessResult("注册成功。需要等待管理员审批通过后方可登录系统。");
+            }
+        }
     }
 
     @MenuData("个人信息:公告消息")

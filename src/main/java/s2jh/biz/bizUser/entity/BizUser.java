@@ -25,11 +25,6 @@ import java.math.BigDecimal;
 public class BizUser extends BaseNativeEntity {
     private static final long serialVersionUID = 4231028228537930521L;
 
-    // 不需要
-    // @MetaData("uid")
-    // @Column(name = "uid", nullable = false, unique = true)
-    // private String uid;
-
     @MetaData("用户openid")
     @Column(name = "openid", nullable = false, unique = true)
     private String openid;

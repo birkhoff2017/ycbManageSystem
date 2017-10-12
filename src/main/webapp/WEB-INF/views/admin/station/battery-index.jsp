@@ -85,7 +85,8 @@
             }, {
                 label: '充电线类型',
                 name: 'cable',
-                //formatter: 'integer',
+                width: 40,
+                align: 'center',
                 editable: false
             }, {
                 label: '电量',

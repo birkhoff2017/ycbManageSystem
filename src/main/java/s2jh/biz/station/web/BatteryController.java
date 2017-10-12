@@ -87,7 +87,6 @@ public class BatteryController extends BaseController<Battery, Long> {
 
     @RequiresPermissions("业务模块:手动弹出电池")
     @RequestMapping(value = "/popup", method = RequestMethod.POST)
-    @ResponseBody
     public void popup(@RequestParam("ids") Long... ids) throws IOException {
         GroupPropertyFilter groupPropertyFilter = GroupPropertyFilter.buildDefaultAndGroupFilter();
         groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.IN, "id", ids));
@@ -96,7 +95,7 @@ public class BatteryController extends BaseController<Battery, Long> {
             for (Battery battery : batteryList) {
                 String mac = battery.getStation().getMac();
                 Integer slot = battery.getSlot();
-                String cmd = "ACT:popup;EVENT_CODE:55;STATION:" + battery.getStation().getSid() + ";MAC:" + mac + ";SLOT:" + slot + "\r\n";
+                String cmd = "ACT:popup;EVENT_CODE:55;STATIONID:" + battery.getStation().getSid() + ";MAC:" + mac + ";SLOT:" + slot + "\r\n";
                 socketService.SendCmd(cmd);
             }
         }
