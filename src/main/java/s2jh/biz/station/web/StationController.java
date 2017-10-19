@@ -75,4 +75,15 @@ public class StationController extends BaseController<Station, Long> {
     public OperationResult delete(@RequestParam("ids") Long... ids) {
         return super.delete(ids);
     }
+
+    /**
+     * 批量修改设备的通信IP和port
+     *
+     * @param ids
+     */
+    @RequestMapping(value = "/alterIpAndPort", method = RequestMethod.POST)
+    @ResponseBody
+    public void alterIpAndPort(@RequestParam("ids") Long... ids) {
+        this.stationService.alterIpAndPort(ids);
+    }
 }

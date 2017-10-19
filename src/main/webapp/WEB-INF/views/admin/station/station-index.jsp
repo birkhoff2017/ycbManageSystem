@@ -162,7 +162,30 @@
             editurl: WEB_ROOT + '/admin//station/station/edit',
             editrulesurl: WEB_ROOT + '/admin/util/validate?clazz=${clazz}',
             delurl: WEB_ROOT + '/admin/station/station/delete',
-            fullediturl: WEB_ROOT + '/admin/station/station/edit-tabs'
+            fullediturl: WEB_ROOT + '/admin/station/station/edit-tabs',
+            operations:
+                function (itemArray) {
+                    var $alterIpAndPort = $('<li data-position="multi" data-toolbar="show"><a href="javascript:;"> <i class="fa fa-print"></i>修改机器同步IP和port</a></li>');
+                    $alterIpAndPort.children("a").bind("click", function (e) {
+                        alert("请确认是否要修给设备的同步IP和port！");
+                        loading = true;
+                        e.preventDefault();
+                        var $grid = $(this).closest(".ui-jqgrid").find(".ui-jqgrid-btable:first");
+                        var url = WEB_ROOT + "/admin/station/station/alterIpAndPort?ids=";
+                        var rowDatas = $grid.jqGrid("getSelectedRowdatas");
+                        if (rowDatas.length == 0) {
+                            alert("请选择想要修改的设备！");
+                            return;
+                        }
+                        for (i = 0; i < rowDatas.length; i++) {
+                            var rowData = rowDatas[i];
+                            url += rowData['id'] + ",";
+                        }
+                        $.post(url, "", function () {
+                        });
+                    });
+                    itemArray.push($alterIpAndPort);
+                }
         });
     });
 </script>
