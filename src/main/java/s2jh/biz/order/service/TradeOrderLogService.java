@@ -206,7 +206,7 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
      * 向用户发送退款成功的消息
      *
      * @param bizUser 待退款用户
-     * @param order 退款订单
+     * @param order   退款订单
      */
     private void refundWeixinOrder(BizUser bizUser, TradeOrderLog order) {
         //更新用户可用余额信息
@@ -217,26 +217,39 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
         bizUserService.save(bizUser);
         //将订单中用户的使用费用置为0
         order.setUsefee(BigDecimal.ZERO);
+        BigDecimal refundedUsable = order.getRefundedUsable();
+        order.setRefundedUsable(refundedUsable.add(usefee));
         this.save(order);
         //向用户发送退款成功的消息
         String openid = bizUser.getOpenid();
-        this.sendRefundMessage(openid, usefee);
+        Map<String, String> map = new LinkedHashMap<>();
+        //退款原因
+        map.put("keyword1", "系统故障");
+        //退款时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String requestTime = format.format(new Date());
+        map.put("keyword2", requestTime);
+        //退款金额
+        map.put("keyword3", usefee.toString() + "元");
+        //备注
+        map.put("keyword4", "退款至余额的钱可以在下次充电时使用");
+        this.sendRefundMessage(openid, map);
     }
 
 
     /**
      * 向微信用户发送退款消息
      *
-     * @param openid
-     * @param usefee
+     * @param openid     消息推送用户的openID
+     * @param keywordMap keywords
      */
-    private void sendRefundMessage(String openid, BigDecimal usefee) {
+    private void sendRefundMessage(String openid, Map<String, String> keywordMap) {
 
         //如果有可用的message
         Message usableMessage = messageDao.getUsableMessage(openid);
         if (null != usableMessage) {
             //使用form_id推送消息
-            this.refundSendTemplate(openid, wxRefundTemplateId, usableMessage, usefee);
+            this.refundSendTemplate(openid, wxRefundTemplateId, usableMessage, keywordMap);
         }
     }
 
@@ -246,30 +259,25 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
      * @param openid     向谁推送消息
      * @param templateid 推送消息的模板
      * @param message    获取推送消息用的form_id
-     * @param usefee     退款金额
+     * @param keywordMap keyword
      */
-    private void refundSendTemplate(String openid, String templateid, Message message, BigDecimal usefee) {
+    private void refundSendTemplate(String openid, String templateid, Message message, Map<String, String> keywordMap) {
         //根据具体模板参数组装
         WechatTemplateMsg wechatTemplateMsg = new WechatTemplateMsg();
         wechatTemplateMsg.setTemplate_id(templateid);
         wechatTemplateMsg.setTouser(openid);
         wechatTemplateMsg.setPage("/pages/user/user"); //跳转页面
         wechatTemplateMsg.setForm_id(message.getForm_prepay_id());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String requestTime = format.format(new Date());
+
         TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
-        //详细内容
-//        params.put("first", WechatTemplateMsg.item("您的退款已经退到余额", "#000000"));
         //退款原因
-        params.put("keyword1", WechatTemplateMsg.item("系统故障", "#000000"));
+        params.put("keyword1", WechatTemplateMsg.item(keywordMap.get("keyword1"), "#000000"));
         //退款时间
-        params.put("keyword2", WechatTemplateMsg.item(requestTime, "#000000"));
+        params.put("keyword2", WechatTemplateMsg.item(keywordMap.get("keyword2"), "#000000"));
         //退款金额
-        params.put("keyword3", WechatTemplateMsg.item(usefee + "元", "#000000"));
-        //账户余额
-//        params.put("keyword4", WechatTemplateMsg.item(usablemoney + "元", "#000000"));
+        params.put("keyword3", WechatTemplateMsg.item(keywordMap.get("keyword3"), "#000000"));
         //备注
-        params.put("keyword4", WechatTemplateMsg.item("退款至余额的钱可以在下次充电时使用", "#000000"));
+        params.put("keyword4", WechatTemplateMsg.item(keywordMap.get("keyword4"), "#000000"));
 
         wechatTemplateMsg.setData(params);
         String data = JsonUtils.writeValueAsString(wechatTemplateMsg);
@@ -298,7 +306,7 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
                 } else {
                     //更新prepay_id的使用次数
                     message.setLastModifiedBy("SYS:message");
-                    this.messageDao.updateMessageNumberById(message.getId(),message.getNumber());
+                    this.messageDao.updateMessageNumberById(message.getId(), message.getNumber());
                 }
             }
         } catch (Exception e) {
@@ -331,5 +339,80 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
         }
     }
 
+    /**
+     * 手动退押金到余额
+     *
+     * @param ids
+     */
+    public void refundDeposit(Long[] ids) {
+        GroupPropertyFilter groupPropertyFilter = GroupPropertyFilter.buildDefaultAndGroupFilter();
+        groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.IN, "id", ids));
+        List<TradeOrderLog> orderLogList = this.findByFilters(groupPropertyFilter);
 
+        if (CollectionUtils.isNotEmpty(orderLogList)) {
+            for (TradeOrderLog order : orderLogList) {
+                String orderid = order.getOrderid();
+                System.out.println("需要退款的订单的编号为：" + orderid);
+                //判断是小程序订单还是支付宝订单,2为支付宝的订单，3为小程序的订单
+                Integer alipayPlatform = 2;
+                Integer weixinPlatform = 3;
+                BizUser bizUser = order.getBizUser();
+                if (alipayPlatform.equals(order.getPlatform())) {
+                    return;
+                } else if (weixinPlatform.equals(order.getPlatform())) {
+                    //退款到用户账户
+                    this.refundWeixinDeposit(bizUser, order);
+                }
+            }
+        }
+    }
+
+    /**
+     * 退押金到用户余额
+     *
+     * @param bizUser 待退款用户
+     * @param order   退款订单
+     */
+    private void refundWeixinDeposit(BizUser bizUser, TradeOrderLog order) {
+        //更新用户可用余额信息
+        //获取用户现在的账户余额
+        BigDecimal usablemoney = bizUser.getUsablemoney();
+        //获取到该笔订单的押金
+        BigDecimal price = order.getPrice();
+        //获取到该笔订单用户消费的金额
+        BigDecimal usefee = order.getUsefee();
+        //用该笔订单的押金减去该笔订单的消费金额，得到应当退还的金额
+        BigDecimal subtract = price.subtract(usefee);
+        //将用户原来的可用余额加上应该退还的金额
+        usablemoney = usablemoney.add(subtract);
+        //更新用户账户信息
+        bizUser.setUsablemoney(usablemoney);
+        bizUserService.save(bizUser);
+        //修改订单状态为   7	'手动退押金'
+        order.setStatus(7);
+        //修改order中的refundedUsable（已退款至可用余额）为原已退款至可用余额加上本次退款金额
+        BigDecimal refundedUsable = order.getRefundedUsable();
+        if (null == refundedUsable) {
+            refundedUsable = subtract;
+        } else {
+            refundedUsable = refundedUsable.add(subtract);
+        }
+        order.setRefundedUsable(refundedUsable);
+        this.save(order);
+        //向用户发送押金退还通知
+        String openid = bizUser.getOpenid();
+
+        Map<String, String> map = new LinkedHashMap<>();
+        //退款原因
+        map.put("keyword1", "手动退押金");
+        //退款时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String requestTime = format.format(new Date());
+        map.put("keyword2", requestTime);
+        //退款金额
+        map.put("keyword3", subtract.toString() + "元");
+        //备注
+        map.put("keyword4", "退款至余额的钱可以在下次充电时使用");
+        this.sendRefundMessage(openid, map);
+    }
 }

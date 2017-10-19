@@ -80,17 +80,26 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
         return super.delete(ids);
     }
 
-    //@RequiresPermissions("业务模块:管理员手动退款")
-
     /**
      * 手动退订单款
      * 对于支付宝订单，做取消订单操作
      * 对于小程序的订单，退款到用户可用余额
-     * @param ids
+     * @param ids 订单编号
      */
+    //@RequiresPermissions("业务模块:管理员手动退款")
     @RequestMapping(value = "/refund", method = RequestMethod.POST)
     @ResponseBody
     public void refund(@RequestParam("ids") Long... ids){
         this.tradeOrderLogService.refundOrders(ids);
+    }
+
+    /**
+     * 手动退押金到用户余额
+     * @param ids 订单编号
+     */
+    @RequestMapping(value = "/refundDeposit",method = RequestMethod.POST)
+    @ResponseBody
+    public void refundDeposit(@RequestParam("ids")Long... ids){
+        this.tradeOrderLogService.refundDeposit(ids);
     }
 }
