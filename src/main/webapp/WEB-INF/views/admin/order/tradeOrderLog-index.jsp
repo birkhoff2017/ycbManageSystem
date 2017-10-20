@@ -158,12 +158,12 @@
                 label: '提现金额',
                 name: 'refunded',
                 formatter: 'currency',
-                editable: true
+                editable: false
             }, {
                 label: '已退款至可用余额',
                 name: 'refundedUsable',
                 formatter: 'currency',
-                editable: true
+                editable: false
             }, {
                 label: '租金',
                 name: 'usefee',
@@ -211,7 +211,51 @@
             editurl: WEB_ROOT + '/admin//order/trade-order-log/edit',
             editrulesurl: WEB_ROOT + '/admin/util/validate?clazz=${clazz}',
             delurl: WEB_ROOT + '/admin/order/trade-order-log/delete',
-            fullediturl: WEB_ROOT + '/admin/order/trade-order-log/edit-tabs'
+            fullediturl: WEB_ROOT + '/admin/order/trade-order-log/edit-tabs',
+	    operations:
+            function (itemArray) {
+                var $refundUseFee = $('<li data-position="multi" data-toolbar="show"><a href="javascript:;"> <i class="fa fa-print"></i>手动退消费金额</a></li>');
+                var $refundDeposit = $('<li data-position="multi" data-toolbar="show"><a href="javascript:;"> <i class="fa fa-print"></i>手动退押金到账户余额</a></li>');
+                $refundUseFee.children("a").bind("click", function (e) {
+                    alert("请确认是否要退款！");
+                    loading = true;
+                    e.preventDefault();
+                    var $grid = $(this).closest(".ui-jqgrid").find(".ui-jqgrid-btable:first");
+                    var url = WEB_ROOT + "/admin/order/trade-order-log/refund?ids=";
+                    var rowDatas = $grid.jqGrid("getSelectedRowdatas");
+                    if (rowDatas.length == 0) {
+                        alert("请选择想要退款的订单！");
+                        return;
+                    }
+                    for (i = 0; i < rowDatas.length; i++) {
+                        var rowData = rowDatas[i];
+                        url += rowData['id'] + ",";
+                    }
+                    $.post(url, "", function () {
+                    });
+                });
+                itemArray.push($refundUseFee);
+                $refundDeposit.children("a").bind("click", function (e) {
+                    alert("请确认是否要退款！");
+                    loading = true;
+                    e.preventDefault();
+                    var $grid = $(this).closest(".ui-jqgrid").find(".ui-jqgrid-btable:first");
+                    var url = WEB_ROOT + "/admin/order/trade-order-log/refundDeposit?ids=";
+                    var rowDatas = $grid.jqGrid("getSelectedRowdatas");
+                    if (rowDatas.length == 0) {
+                        alert("请选择想要退款的订单！");
+                        return;
+                    }
+                    for (i = 0; i < rowDatas.length; i++) {
+                        var rowData = rowDatas[i];
+                        url += rowData['id'] + ",";
+                    }
+                    $.post(url, "", function () {
+                    });
+                });
+                itemArray.push($refundDeposit);
+
+            }
         });
     });
 </script>
