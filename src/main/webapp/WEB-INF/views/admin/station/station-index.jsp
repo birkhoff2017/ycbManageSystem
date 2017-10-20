@@ -167,7 +167,7 @@
                 function (itemArray) {
                     var $alterIpAndPort = $('<li data-position="multi" data-toolbar="show"><a href="javascript:;"> <i class="fa fa-print"></i>修改机器同步IP和port</a></li>');
                     $alterIpAndPort.children("a").bind("click", function (e) {
-                        alert("请确认是否要修给设备的同步IP和port！");
+                        alert("请确认是否要修改设备的同步IP和port！");
                         loading = true;
                         e.preventDefault();
                         var $grid = $(this).closest(".ui-jqgrid").find(".ui-jqgrid-btable:first");

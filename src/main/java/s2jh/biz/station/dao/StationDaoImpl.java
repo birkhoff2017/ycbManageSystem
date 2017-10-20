@@ -18,16 +18,14 @@ public class StationDaoImpl {
     private EntityManager entityManager;
 
     /**
-     * 从字典表中查询对应的value
+     * 获取次要数据，即secondaryValue
      *
      * @param key
      * @return
      */
-    public String getValue(String key) {
-        String sql = "SELECT primaryValue FROM sys_datadict WHERE primaryKey  = '" + key + "'";
+    public String getSecondaryValue(String key) {
+        String sql = "SELECT secondaryValue FROM sys_datadict WHERE parent_id = '58' AND primaryKey  = '" + key + "'";
         Object singleResult = entityManager.createNativeQuery(sql).getSingleResult();
-
         return (String) singleResult;
-
     }
 }
