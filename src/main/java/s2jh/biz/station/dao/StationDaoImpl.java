@@ -24,7 +24,7 @@ public class StationDaoImpl {
      * @return
      */
     public String getSecondaryValue(String key) {
-        String sql = "SELECT secondaryValue FROM sys_datadict WHERE parent_id = '58' AND primaryKey  = '" + key + "'";
+        String sql = "SELECT secondaryValue FROM sys_DataDict WHERE parent_id = '58' AND primaryKey  = '" + key + "'";
         Object singleResult = entityManager.createNativeQuery(sql).getSingleResult();
         return (String) singleResult;
     }
