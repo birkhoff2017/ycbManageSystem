@@ -24,7 +24,7 @@ public class BizUserAuth extends BaseNativeEntity {
 
     @MetaData("用户表")
     @Column(name = "user_id", nullable = false)
-    private Long userid;
+    private Long userId;
 
     @MetaData("账户类型")
     @Column(name = "identity_type", nullable = false)

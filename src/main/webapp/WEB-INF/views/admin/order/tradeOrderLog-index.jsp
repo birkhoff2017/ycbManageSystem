@@ -53,7 +53,7 @@
                 label: '用户openid',
                 name: 'bizUser.openid',
                 width: 200,
-                index: 'bizUser',
+                index: 'bizUser.openid',
                 align: 'center',
                 editable: false
             }, {
@@ -91,7 +91,7 @@
             }, {
                 label: '借出商铺id',
                 name: 'borrowShop.id',
-                index: 'borrowShop',
+                index: 'borrowShop.id',
                 align: 'center',
                 width: 100,
                 editable: false
@@ -104,14 +104,14 @@
             }, {
                 label: '借出设备id',
                 name: 'borrowStation.sid',
-                index: 'borrowStation',
+                index: 'borrowStation.sid',
                 align: 'center',
                 width: 100,
                 editable: false
             }, {
                 label: '借出商铺站点id',
                 name: 'borrowShopStation.id',
-                index: 'borrowShopStation',
+                index: 'borrowShopStation.id',
                 align: 'center',
                 width: 100,
                 editable: false
@@ -124,7 +124,7 @@
             }, {
                 label: '归还商铺id',
                 name: 'returnShop.id',
-                index: 'returnShop',
+                index: 'returnShop.id',
                 align: 'center',
                 width: 100,
                 editable: false
@@ -137,14 +137,14 @@
             }, {
                 label: '归还设备id',
                 name: 'returnStation.sid',
-                index: 'returnStation',
+                index: 'returnStation.sid',
                 align: 'center',
                 width: 100,
                 editable: false
             }, {
                 label: '归还商铺站点id',
                 name: 'returnShopStation.id',
-                index: 'returnShopStation',
+                index: 'returnShopStation.id',
                 align: 'center',
                 width: 100,
                 editable: false

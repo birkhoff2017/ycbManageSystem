@@ -166,7 +166,7 @@ public class AdminController {
         signinid = signinid.trim();
         if (signinid.length() < 3) {
             return OperationResult.buildFailureResult("用户名长度不能小于3位");
-        } else if (this.userService.findByProperty("signinid", signinid) != null) {
+        } else if (this.userService.findByProperty("authUid", signinid) != null) {
             return OperationResult.buildFailureResult("注册账号:" + signinid + " 已被注册使用，请修改使用其他账号");
         } else {
             password = password.trim();

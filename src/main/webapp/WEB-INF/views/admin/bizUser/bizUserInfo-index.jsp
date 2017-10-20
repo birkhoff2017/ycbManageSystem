@@ -46,7 +46,7 @@
             }, {
                 label: '头像',
                 name: 'headimgurl',
-                width: 50,
+                width: 15,
                 align: 'center',
                 formatter: Biz.imgViewFormatter,
                 editable: false
