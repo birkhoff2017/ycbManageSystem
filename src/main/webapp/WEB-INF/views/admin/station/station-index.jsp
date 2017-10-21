@@ -181,7 +181,8 @@
                             var rowData = rowDatas[i];
                             url += rowData['id'] + ",";
                         }
-                        $.post(url, "", function () {
+                        $.post(url, "", function (data) {
+                            alert(data);
                         });
                     });
                     itemArray.push($alterIpAndPort);
