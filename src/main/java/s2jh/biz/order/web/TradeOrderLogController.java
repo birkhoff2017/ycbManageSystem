@@ -81,25 +81,75 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
     }
 
     /**
-     * 手动退订单款
-     * 对于支付宝订单，做取消订单操作
-     * 对于小程序的订单，退款到用户可用余额
-     * @param ids 订单编号
+     * 订单撤销，当用户扫码创建完订单但电池未弹出时使用
+     *
+     * @param orderid 订单编号
      */
     //@RequiresPermissions("业务模块:管理员手动退款")
-    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    @RequestMapping(value = "/cancelOrder", method = RequestMethod.POST)
     @ResponseBody
-    public void refund(@RequestParam("ids") Long... ids){
-        this.tradeOrderLogService.refundOrders(ids);
+    public String cancelOrder(@RequestParam("orderid") String orderid) {
+        return this.tradeOrderLogService.cancelOrder(orderid);
     }
 
     /**
-     * 手动退押金到用户余额
-     * @param ids 订单编号
+     * 全额退款押金
+     *
+     * @param orderId       订单编号
+     * @param returnTime    归还时间
+     * @param returnStation 归还时间
      */
-    @RequestMapping(value = "/refundDeposit",method = RequestMethod.POST)
+    @RequestMapping(value = "/refundAllDeposit", method = RequestMethod.POST)
     @ResponseBody
-    public void refundDeposit(@RequestParam("ids")Long... ids){
-        this.tradeOrderLogService.refundDeposit(ids);
+    public String refundAllDeposit(
+            @RequestParam("order_id") String orderId,
+            @RequestParam("return_time") String returnTime,
+            @RequestParam("return_station") String returnStation
+    ) {
+        return this.tradeOrderLogService.refundAllDeposit(orderId, returnTime, returnStation);
     }
+
+    /**
+     * 返回所有设备的编号
+     */
+    @RequestMapping(value = "/findStations", method = RequestMethod.POST)
+    @ResponseBody
+    public String allStations(@RequestParam("content") String content) {
+        return this.tradeOrderLogService.findStations(content);
+    }
+
+    /**
+     * 手动退部分押金到用户余额
+     */
+    @RequestMapping(value = "/refundDeposit", method = RequestMethod.POST)
+    @ResponseBody
+    public String refundDeposit(@RequestParam("order_id") String orderId,
+                                @RequestParam("return_time") String returnTime,
+                                @RequestParam("return_station") String returnStation,
+                                @RequestParam("charger") String charger,
+                                @RequestParam("charging_cable") String chargingCable
+    ) {
+        return this.tradeOrderLogService.refundDeposit(orderId, returnTime, returnStation, charger, chargingCable);
+    }
+
+    /**
+     * 处理遗失充电宝的情况
+     * 对于支付宝订单，向支付宝发送赔偿请求
+     * 对于小程序订单，扣除押金
+     *
+     * @param orderid
+     */
+    @RequestMapping(value = "/lostPowerBank", method = RequestMethod.POST)
+    @ResponseBody
+    public String lostPowerBank(@RequestParam("order_id") String orderid, @RequestParam("lost_time") String lostTime) {
+        return this.tradeOrderLogService.lostPowerBank(orderid, lostTime);
+    }
+
+    @RequestMapping(value = "/refundExtraMoney", method = RequestMethod.POST)
+    @ResponseBody
+    public String refundExtraMoney(@RequestParam("order_id") String orderid, @RequestParam("extra_money") String extraMoney) {
+        return this.tradeOrderLogService.refundExtraMoney(orderid,extraMoney);
+    }
+
+
 }

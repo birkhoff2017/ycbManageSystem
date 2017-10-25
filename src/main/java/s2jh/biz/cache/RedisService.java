@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
  * Created by zhuhui on 17-7-27.
  */
 @Service
-//@PropertySource("classpath:bootstrap.properties")
 public class RedisService {
 
     @Autowired
@@ -28,5 +27,10 @@ public class RedisService {
             throw new RuntimeException("key is null.");
         }
         return template.opsForValue().get(key);
+    }
+
+    public void setKeyValue(String key, String value) {
+        template.setValueSerializer(new GenericToStringSerializer<>(String.class));
+        template.opsForValue().set(key, value);
     }
 }

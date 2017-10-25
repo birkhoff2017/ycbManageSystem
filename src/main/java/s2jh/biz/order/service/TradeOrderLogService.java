@@ -1,39 +1,38 @@
 package s2jh.biz.order.service;
 
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.request.AlipayOpenPublicMessageSingleSendRequest;
-import com.alipay.api.request.ZhimaMerchantOrderRentCancelRequest;
-import com.alipay.api.response.AlipayOpenPublicMessageSingleSendResponse;
-import com.alipay.api.response.ZhimaMerchantOrderRentCancelResponse;
 import lab.s2jh.core.dao.jpa.BaseDao;
 import lab.s2jh.core.pagination.GroupPropertyFilter;
 import lab.s2jh.core.pagination.PropertyFilter;
 import lab.s2jh.core.service.BaseService;
-import lab.s2jh.core.util.JsonUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import s2jh.biz.bizUser.entity.BizUser;
 import s2jh.biz.bizUser.service.BizUserService;
 import s2jh.biz.cache.RedisService;
-import s2jh.biz.constant.GlobalConfig;
-import s2jh.biz.formid.dao.MessageDaoImpl;
-import s2jh.biz.formid.entity.Message;
+import s2jh.biz.feeStrategy.entity.FeeStrategy;
+import s2jh.biz.feeStrategy.service.FeeStrategyService;
+import s2jh.biz.formid.service.MessageService;
 import s2jh.biz.order.dao.TradeOrderLogDao;
 import s2jh.biz.order.entity.TradeOrderLog;
-import s2jh.biz.order.entity.WechatTemplateMsg;
-import s2jh.biz.util.HttpRequest;
+import s2jh.biz.shop.entity.Shop;
+import s2jh.biz.shop.entity.ShopStation;
+import s2jh.biz.shop.service.ShopStationService;
+import s2jh.biz.station.dao.StationDao;
+import s2jh.biz.station.entity.Station;
+import s2jh.biz.station.service.StationService;
+import s2jh.biz.util.JsonUtils;
+import s2jh.biz.util.TimeUtil;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -47,21 +46,42 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
     @Autowired
     private BizUserService bizUserService;
 
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
-    private MessageDaoImpl messageDao;
+    private StationService stationService;
+
+    @Autowired
+    private StationDao stationDao;
+
+    @Autowired
+    private ShopStationService shopStationService;
+
+    @Autowired
+    private FeeStrategyService feeStrategyService;
+
+    @Autowired
+    private AlipayMessageService alipayMessageService;
+
+    @Autowired
+    private AlipayOrderService alipayOrderService;
+
+    @Autowired
+    private WechatMessageService wechatMessageService;
+
+    @Autowired
+    private WeChatOrderService weChatOrderService;
 
     @Autowired
     private RedisService redisService;
 
-    @Value("${appID}")
-    private String appID;
-
-    @Value("${appSecret}")
-    private String appSecret;
 
     @Value("${wxRefundTemplateId}")
     private String wxRefundTemplateId;
+
+    @Value("${wxLostBankPowerTemplateId}")
+    private String wxLostBankPowerTemplateId;
 
     @Override
     protected BaseDao<TradeOrderLog, Long> getEntityDao() {
@@ -69,350 +89,440 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
     }
 
     /**
-     * 手动退订单款，对支付宝订单和小程序订单分别做不同处理
+     * 手动取消订单
+     * <p>
+     * 先更新订单信息，按照完结订单的逻辑更新订单信息
+     * <p>
+     * 对支付宝订单和小程序订单分别做不同处理
      *
-     * @param ids
+     * @param orderid
      */
-    public void refundOrders(Long[] ids) {
+    public String cancelOrder(String orderid) {
+        //查询出需要取消的订单
+        TradeOrderLog tradeOrderLog = this.findTradeOrderLogByOrderId(orderid);
+
+        //更新订单信息
+        tradeOrderLog.setLastModifiedBy("SYS:ycbManageSystem");
+        tradeOrderLog.setLastModifiedDate(new Date());
+        //更新订单的状态为3，归还
+        tradeOrderLog.setStatus(3);
+        //更新用户的使用费用
+        tradeOrderLog.setUsefee(BigDecimal.valueOf(0));
+        //更新用户的归还时间
+        tradeOrderLog.setReturnTime(new Date());
+        //更新订单的归还店铺return_shop_id
+        tradeOrderLog.setReturnShop(tradeOrderLog.getBorrowShop());
+        //更新订单的中间表信息return_shop_station_id
+        tradeOrderLog.setReturnShopStation(tradeOrderLog.getBorrowShopStation());
+        //更新订单表中的return_station_id
+        tradeOrderLog.setReturnStation(tradeOrderLog.getBorrowStation());
+        //更新订单表中的return_station_name
+        tradeOrderLog.setReturnShopName(tradeOrderLog.getBorrowShopName());
+        //更新订单信息
+        this.save(tradeOrderLog);
+
+        Integer platform = tradeOrderLog.getPlatform();
+        //判断是哪个平台的订单就调用哪个平台的消息推送service，2为支付宝的订单，3为小程序的订单
+        if (3 == platform) {
+            BizUser bizUser = tradeOrderLog.getBizUser();
+            // 电池弹出失败自动退款至用户余额
+            //获取到该笔订单用户的押金
+            BigDecimal paid = tradeOrderLog.getPrice();
+            //获取用户可用余额信息
+            BigDecimal usablemoney = bizUser.getUsablemoney();
+            //获取用户的押金
+            BigDecimal deposit = bizUser.getDeposit();
+            //用户的押金减掉该笔订单支付的金额
+            BigDecimal subtract = deposit.subtract(paid);
+            bizUser.setDeposit(subtract);
+            //用户的可用余额加上该笔订单支付的金额
+            BigDecimal add = usablemoney.add(paid);
+            bizUser.setUsablemoney(add);
+            //更新用户信息
+            bizUser.setLastModifiedBy("SYS:return_back");
+            bizUser.setLastModifiedDate(new Date());
+            bizUserService.save(bizUser);
+
+            // 推送归还成功消息
+            weChatOrderService.sendReturnSuccessMessage("0秒", "0元", tradeOrderLog);
+            return "取消订单成功";
+        } else if (2 == platform) {
+            //完结信用借还订单，费用为0
+            alipayOrderService.completeOrder(tradeOrderLog, BigDecimal.valueOf(0));
+            //发送订单完结的消息
+            alipayMessageService.sendReturnMessage("0秒", "0", tradeOrderLog);
+            return "取消订单成功";
+        }
+
+        return "取消订单失败";
+    }
+
+
+    /**
+     * 查询出所有商铺
+     *
+     * @param content
+     * @return
+     */
+    public String findStations(String content) {
+
+        //从redis中取出所有设备编号的json格式的字符串
+        String stationIdList = this.redisService.getKeyValue("STATION_ID_LIST");
+        //当在redis中没有查询到存储了所有设备编号的json格式的字符串的时候，需要先去数据库中查询
+        if (null == stationIdList || "".equals(stationIdList)) {
+            //查询出所有设备的信息来
+            List<Station> stationList = this.stationDao.findAll();
+            //新建一个list用来存储所有设备编号
+            List<String> sidList = new ArrayList<>();
+            for (Station station : stationList) {
+                Long sid = station.getSid();
+                String sidString = sid.toString();
+                sidList.add(sidString);
+            }
+            //把所有设备编号转为json格式
+            stationIdList = JsonUtils.writeValueAsString(sidList);
+            //把所有设备编号放入redis中
+            this.redisService.setKeyValue("STATION_ID_LIST", stationIdList);
+        }
+        //将存储着所有设备编号的json格式的字符串转换为对象
+        List<String> sidList = JsonUtils.readValueAsList(stationIdList);
+        //新建一个list用来存储返回去的数据
+        List<String> list = new ArrayList();
+        //遍历所有设备的sid,如果以传过来的信息开头就放入list中
+        for (String sid : sidList) {
+            String sidString = sid.toString();
+            if (sidString.startsWith(content)) {
+                list.add(sidString);
+            }
+        }
+        String result = JsonUtils.writeValueAsString(list);
+        return result;
+    }
+
+    /**
+     * 根据订单号查询订单
+     *
+     * @return
+     */
+    private TradeOrderLog findTradeOrderLogByOrderId(String orderid) {
+        //单一条件，filterName规则为   枚举类型的比较符号 _ 字段名称
+        PropertyFilter propertyFilter = new PropertyFilter(TradeOrderLog.class, PropertyFilter.MatchType.EQ.toString() + "_orderid", orderid);
+        List<TradeOrderLog> tradeOrderLogs = this.findByFilter(propertyFilter);
+        TradeOrderLog tradeOrderLog = tradeOrderLogs.get(0);
+        return tradeOrderLog;
+    }
+
+    /**
+     * 全额退押金
+     *
+     * @param orderId
+     * @param returnTime
+     * @param returnStation
+     * @return
+     */
+    public String refundAllDeposit(String orderId, String returnTime, String returnStation) {
+        //查询出需要退款的订单
+        TradeOrderLog tradeOrderLog = this.findTradeOrderLogByOrderId(orderId);
+
+        //更新订单信息
+        tradeOrderLog.setLastModifiedBy("SYS:returnback");
+        tradeOrderLog.setLastModifiedDate(new Date());
+        //更新订单的状态为7	'手动退押金'
+        tradeOrderLog.setStatus(7);
+        //更新用户的使用费用
+        tradeOrderLog.setUsefee(BigDecimal.valueOf(0));
+        //更新用户的归还时间
+        Integer integer = Integer.valueOf(returnTime);
+        Long l = System.currentTimeMillis() + integer * 60 * 60 * 1000;
+        tradeOrderLog.setReturnTime(new Date(l));
+        //更新订单的归还店铺return_shop_id
+        //根据设备id查询对应的ycb_mcs_shop_station
+        //当查询出来的shop_station不为null的时候，处理下面的逻辑
+        ShopStation shopStation = this.findShopStationByStationId(returnStation);
+        if (shopStation != null) {
+            Shop shop = shopStation.getShop();
+            tradeOrderLog.setReturnShop(shop);
+            //更新订单的中间表信息return_shop_station_id
+            tradeOrderLog.setReturnShopStation(shopStation);
+            //更新订单表中的return_station_id
+            tradeOrderLog.setReturnStation(shopStation.getStation());
+            //更新订单表中的return_station_name
+            tradeOrderLog.setReturnShopName(shop.getName());
+        }
+
+        //更新订单信息
+        this.save(tradeOrderLog);
+
+        Integer platform = tradeOrderLog.getPlatform();
+        //判断是哪个平台的订单就调用哪个平台的消息推送service，2为支付宝的订单，3为小程序的订单
+        if (3 == platform) {
+            BizUser bizUser = tradeOrderLog.getBizUser();
+            // 电池弹出失败自动退款至用户余额
+            //获取到该笔订单用户的押金
+            BigDecimal paid = tradeOrderLog.getPrice();
+            //获取用户可用余额信息
+            BigDecimal usablemoney = bizUser.getUsablemoney();
+            //获取用户的押金
+            BigDecimal deposit = bizUser.getDeposit();
+            //用户的押金减掉该笔订单支付的金额
+            BigDecimal subtract = deposit.subtract(paid);
+            bizUser.setDeposit(subtract);
+            //用户的可用余额加上该笔订单支付的金额
+            BigDecimal add = usablemoney.add(paid);
+            bizUser.setUsablemoney(add);
+            //更新用户信息
+            bizUser.setLastModifiedBy("SYS:return_back");
+            bizUser.setLastModifiedDate(new Date());
+            bizUserService.save(bizUser);
+
+            // 推送归还成功消息
+            weChatOrderService.sendReturnSuccessMessage("0秒", "0元", tradeOrderLog);
+            return "全额退押金成功";
+        } else if (2 == platform) {
+            //完结信用借还订单，费用为0
+            alipayOrderService.completeOrder(tradeOrderLog, BigDecimal.valueOf(0));
+            //发送订单完结的消息
+            alipayMessageService.sendReturnMessage("0秒", "0", tradeOrderLog);
+            return "全额退押金成功";
+        }
+        return "全额退押金失败";
+    }
+
+    /**
+     * 根据shopid查询ShopStation
+     *
+     * @param stationid
+     * @return
+     */
+    private ShopStation findShopStationByStationId(String stationid) {
+
+        PropertyFilter stationFilter = new PropertyFilter(Station.class, PropertyFilter.MatchType.EQ.toString() + "_sid", stationid);
+        List<Station> stationList = this.stationService.findByFilter(stationFilter);
+        //如果没有查询出设备来，直接返回null
+        if (null == stationList || stationList.size() == 0) {
+            return null;
+        }
+        //得到根据设备号查询出来设备
+        Station stationFound = stationList.get(0);
+        //查询shop_station的信息
         GroupPropertyFilter groupPropertyFilter = GroupPropertyFilter.buildDefaultAndGroupFilter();
-        groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.IN, "id", ids));
-        List<TradeOrderLog> orderLogList = this.findByFilters(groupPropertyFilter);
-
-        if (CollectionUtils.isNotEmpty(orderLogList)) {
-            for (TradeOrderLog order : orderLogList) {
-                String orderid = order.getOrderid();
-                System.out.println("需要退款的订单的编号为：" + orderid);
-                //判断是小程序订单还是支付宝订单,2为支付宝的订单，3为小程序的订单
-                Integer alipayPlatform = 2;
-                Integer weixinPlatform = 3;
-                BizUser bizUser = order.getBizUser();
-                if (alipayPlatform.equals(order.getPlatform())) {
-                    //调用支付宝撤销订单接口撤销订单
-                    String orderNo = order.getOrderNo();
-                    String openid = bizUser.getOpenid();
-                    this.cancelCreditOrder(orderNo, openid, orderid);
-                } else if (weixinPlatform.equals(order.getPlatform())) {
-                    //退款到用户账户
-                    this.refundWeixinOrder(bizUser, order);
-                }
-            }
+        groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.EQ, "station", stationFound));
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        List<ShopStation> shopStationList = this.shopStationService.findByFilters(groupPropertyFilter, sort, 10);
+        //如果没有查到中间表的信息，直接返回null
+        if (null == shopStationList || shopStationList.size() == 0) {
+            return null;
         }
+        //获取到shop_station的信息,因为已经按照id逆序排列，所以取最后一个就好
+        ShopStation shopStation = shopStationList.get(0);
+        //判断这
+        return shopStation;
     }
 
     /**
-     * 进行手动退款时，取消支付宝已经生成的信用借还订单
+     * 退部分押金
      *
-     * @param orderNo 信用借还订单号
-     * @param openid  该笔订单对应的用户的openid
-     * @param orderid 该笔订单的orderid
+     * @param orderId
+     * @param returnTime
+     * @param returnStation
+     * @param charger
+     * @param chargingCable
+     * @return
      */
-    private void cancelCreditOrder(String orderNo, String openid, String orderid) {
-        AlipayClient alipayClient = new DefaultAlipayClient(GlobalConfig.ALIPAY_SERVER_URL, GlobalConfig.ALIPAY_APP_ID, GlobalConfig.ALIPAY_PRIVATE_KEY, GlobalConfig.ALIPAY_FORMAT, GlobalConfig.ALIPAY_CHARSET, GlobalConfig.ALIPAY_ALIPAYPUBLIC_KEY, GlobalConfig.ALIPAY_SIGNTYPE);
-        ZhimaMerchantOrderRentCancelRequest request = new ZhimaMerchantOrderRentCancelRequest();
-        Map<String, Object> bizContentMap = new LinkedHashMap<>();
-        bizContentMap.put("order_no", orderNo);
-        bizContentMap.put("product_code", GlobalConfig.ALIPAY_PRODUCT_CODE);
-        request.setBizContent(JsonUtils.writeValueAsString(bizContentMap));
-        ZhimaMerchantOrderRentCancelResponse response = null;
-        try {
-            response = alipayClient.execute(request);
-        } catch (AlipayApiException e) {
-            logger.error(e.getMessage());
-        }
-        if (response == null || !response.isSuccess()) {
-            logger.error("信用借还订单取消失败" + orderNo);
-            if (response != null) {
-                logger.error("错误代码：" + response.getCode() + "错误信息：" + response.getMsg() +
-                        "错误子代码" + response.getSubCode() + "错误子信息：" + response.getSubMsg());
-            }
-        } else {
-            //订单取消成功，向用户推送消息
-            this.sendCancelCreditOrderMessage(openid, orderid);
-        }
-    }
+    public String refundDeposit(String orderId, String returnTime, String returnStation, String charger, String chargingCable) {
+        TradeOrderLog tradeOrderLog = this.findTradeOrderLogByOrderId(orderId);
 
-    /**
-     * 取消订单成功，发送租借失败的通知给用户
-     *
-     * @param openid  根据openid向用户发送消息
-     * @param orderid 该笔订单的订单编号
-     */
-    private void sendCancelCreditOrderMessage(String openid, String orderid) {
-        AlipayClient alipayClient = new DefaultAlipayClient(GlobalConfig.ALIPAY_SERVER_URL, GlobalConfig.ALIPAY_APP_ID, GlobalConfig.ALIPAY_PRIVATE_KEY, GlobalConfig.ALIPAY_FORMAT, GlobalConfig.ALIPAY_CHARSET, GlobalConfig.ALIPAY_ALIPAYPUBLIC_KEY, GlobalConfig.ALIPAY_SIGNTYPE);
-        AlipayOpenPublicMessageSingleSendRequest request = new AlipayOpenPublicMessageSingleSendRequest();
-
-        //顶部色条的色值
-        String headColor = "#000000";
-
-        //点击消息后承接页的地址为附近充电宝站点列表页，带上return_type的目的是
-        //进入附近充电宝站点列表页而不是弹出电池借用成功的弹出框
-        String url = GlobalConfig.ALIPAY_NOTIFY_URL + "/loading.html?return_type=test";
-        //底部链接描述文字，如“查看详情”
-        String actionName = "查看详情";
-
-        //当前文字颜色
-        String firstColor = "#000000";
-        //模板中占位符的值
-        String firstValue = "信用借还订单取消成功，点击详情重新租借";
-
-        //keyword1
-        String keyword1Color = "#000000";
-
-        //remark
-        String remarkColor = "#32cd32";
-        String remarkValue = "信用借还订单取消成功，您可点击详情重新租借。如有疑问，请致电：4006290808";
-
-        Map<String, Object> keyword1 = new LinkedHashMap<>();
-        keyword1.put("color", keyword1Color);
-        keyword1.put("value", orderid);
-        Map<String, Object> first = new LinkedHashMap<>();
-        first.put("color", firstColor);
-        first.put("value", firstValue);
-        Map<String, Object> remark = new LinkedHashMap<>();
-        remark.put("color", remarkColor);
-        remark.put("value", remarkValue);
-        Map<String, Object> context = new LinkedHashMap<>();
-        context.put("head_color", headColor);
-        context.put("url", url);
-        context.put("action_name", actionName);
-        context.put("keyword1", keyword1);
-        context.put("first", first);
-        context.put("remark", remark);
-        Map<String, Object> template = new LinkedHashMap<>();
-        template.put("template_id", GlobalConfig.ALIPAY_SEND_ERROR_MESSAGE);
-        template.put("context", context);
-        Map<String, Object> bizContentMap = new LinkedHashMap<>();
-        bizContentMap.put("to_user_id", openid);
-        bizContentMap.put("template", template);
-        request.setBizContent(JsonUtils.writeValueAsString(bizContentMap));
-        AlipayOpenPublicMessageSingleSendResponse response = null;
-        try {
-            response = alipayClient.execute(request);
-        } catch (AlipayApiException e) {
-            logger.error(e.getMessage());
-        }
-        if (response == null || !response.isSuccess()) {
-            logger.error("向用户发送借用失败的消息出错");
-            if (response != null) {
-                logger.error("错误代码：" + response.getCode() + "错误信息：" + response.getMsg() +
-                        "错误子代码" + response.getSubCode() + "错误子信息：" + response.getSubMsg());
-            }
-        }
-    }
-
-    /**
-     * 退款该笔订单的金额到用户账户，
-     * 将订单中将用户使用费用置为0
-     * 向用户发送退款成功的消息
-     *
-     * @param bizUser 待退款用户
-     * @param order   退款订单
-     */
-    private void refundWeixinOrder(BizUser bizUser, TradeOrderLog order) {
-        //更新用户可用余额信息
-        BigDecimal usablemoney = bizUser.getUsablemoney();
-        BigDecimal usefee = order.getUsefee();
-        usablemoney = usablemoney.add(usefee);
-        bizUser.setUsablemoney(usablemoney);
-        bizUserService.save(bizUser);
-        //将订单中用户的使用费用置为0
-        order.setUsefee(BigDecimal.ZERO);
-        BigDecimal refundedUsable = order.getRefundedUsable();
-        order.setRefundedUsable(refundedUsable.add(usefee));
-        this.save(order);
-        //向用户发送退款成功的消息
-        String openid = bizUser.getOpenid();
-        Map<String, String> map = new LinkedHashMap<>();
-        //退款原因
-        map.put("keyword1", "系统故障");
-        //退款时间
+        // 租借时长
+        Long duration = 0L;
+        //获取到订单所属平台
+        Integer platform = tradeOrderLog.getPlatform();
+        // 计算订单使用金额
+        //获取到用户归还时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String requestTime = format.format(new Date());
-        map.put("keyword2", requestTime);
-        //退款金额
-        map.put("keyword3", usefee.toString() + "元");
-        //备注
-        map.put("keyword4", "退款至余额的钱可以在下次充电时使用");
-        this.sendRefundMessage(openid, map);
-    }
-
-
-    /**
-     * 向微信用户发送退款消息
-     *
-     * @param openid     消息推送用户的openID
-     * @param keywordMap keywords
-     */
-    private void sendRefundMessage(String openid, Map<String, String> keywordMap) {
-
-        //如果有可用的message
-        Message usableMessage = messageDao.getUsableMessage(openid);
-        if (null != usableMessage) {
-            //使用form_id推送消息
-            this.refundSendTemplate(openid, wxRefundTemplateId, usableMessage, keywordMap);
-        }
-    }
-
-    /**
-     * 微信退款通知
-     *
-     * @param openid     向谁推送消息
-     * @param templateid 推送消息的模板
-     * @param message    获取推送消息用的form_id
-     * @param keywordMap keyword
-     */
-    private void refundSendTemplate(String openid, String templateid, Message message, Map<String, String> keywordMap) {
-        //根据具体模板参数组装
-        WechatTemplateMsg wechatTemplateMsg = new WechatTemplateMsg();
-        wechatTemplateMsg.setTemplate_id(templateid);
-        wechatTemplateMsg.setTouser(openid);
-        wechatTemplateMsg.setPage("/pages/user/user"); //跳转页面
-        wechatTemplateMsg.setForm_id(message.getForm_prepay_id());
-
-        TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
-        //退款原因
-        params.put("keyword1", WechatTemplateMsg.item(keywordMap.get("keyword1"), "#000000"));
-        //退款时间
-        params.put("keyword2", WechatTemplateMsg.item(keywordMap.get("keyword2"), "#000000"));
-        //退款金额
-        params.put("keyword3", WechatTemplateMsg.item(keywordMap.get("keyword3"), "#000000"));
-        //备注
-        params.put("keyword4", WechatTemplateMsg.item(keywordMap.get("keyword4"), "#000000"));
-
-        wechatTemplateMsg.setData(params);
-        String data = JsonUtils.writeValueAsString(wechatTemplateMsg);
-        //发送请求
+        Date returnDate = null;
         try {
-            String token = this.getAccessToken();
-            String msgUrl = GlobalConfig.WX_SEND_TEMPLATE_MESSAGE + "?access_token=" + token;
-            String msgResult = HttpRequest.sendPost(msgUrl, data);  //发送post请求
-            if (StringUtils.isEmpty(msgResult)) {
-                logger.info("模板消息发送失败OPENID=: " + openid);
-            } else {
-                Map<String, Object> msgResultMap = JsonUtils.readValue(msgResult);
-                Integer errcode = (Integer) msgResultMap.get("errcode");
-                String errmsg = (String) msgResultMap.get("errmsg");
-                if (0 == errcode) {
-                    logger.info("模板消息发送成功errorCode:{" + errcode + "},errmsg:{" + errmsg + "}");
-                } else {
-                    logger.info("模板消息发送失败errorCode:{" + errcode + "},errmsg:{" + errmsg + "}");
-                }
-                //如果此时的剩余使用次数为1 直接删除
-                if (message.getNumber() <= 1) {
-                    //清除本条数据
-                    this.messageDao.deleteMessageById(message.getId());
-                    //清除该用户过期数据
-                    this.messageDao.deleteMessageByOpenid(openid);
-                } else {
-                    //更新prepay_id的使用次数
-                    message.setLastModifiedBy("SYS:message");
-                    this.messageDao.updateMessageNumberById(message.getId(), message.getNumber());
-                }
-            }
+            returnDate = format.parse(returnTime);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.info("模板消息发送失败OPENID=: " + openid);
+            System.out.println("解析前端传回的用户归还时间失败！！！");
         }
+        duration = (returnDate.getTime() - tradeOrderLog.getBorrowTime().getTime()) / 1000;
+        //获取收费策略
+        ShopStation borrowShopStation = tradeOrderLog.getBorrowShopStation();
+        FeeStrategy feeSettings = borrowShopStation.getFeeSettings();
+
+        BigDecimal usefee = feeStrategyService.calUseFee(feeSettings, duration);
+        //只有当不是支付宝平台的订单的时候才执行该业务逻辑
+        BigDecimal price = tradeOrderLog.getPrice();
+        BigDecimal refund = price.subtract(usefee);
+        //用户支付的金额不能大于押金！！！
+        if (price.compareTo(usefee) < 0) {
+            usefee = price;
+            refund = BigDecimal.ZERO;
+        }
+        //只有当不是支付宝平台的订单的时候，需要更新用户的账户信息
+        BizUser bizUser = tradeOrderLog.getBizUser();
+        if (platform != 2) {
+            // 更新用户账户信息(归还成功，订单押金退还到余额)
+            //更新用户的账户信息
+            bizUser.setLastModifiedBy("SYS:return_back");
+            bizUser.setLastModifiedDate(new Date());
+            //用户的可用余额加上退款金额
+            BigDecimal usablemoney = bizUser.getUsablemoney();
+            BigDecimal add = usablemoney.add(refund);
+            bizUser.setUsablemoney(add);
+            //用户的押金减掉该笔订单的押金
+            BigDecimal deposit = bizUser.getDeposit();
+            BigDecimal subtract = deposit.subtract(price);
+            bizUser.setDeposit(subtract);
+            //更新用户的信息
+            bizUserService.save(bizUser);
+        }
+        // 更新订单信息 订单状态由借出->归还
+
+        //更新订单信息
+        tradeOrderLog.setLastModifiedBy("SYS:returnback");
+        tradeOrderLog.setLastModifiedDate(new Date());
+        //更新订单的状态为93	'管理员已手动退款（归还失败）'	和客服沟通，需要照片留底
+        tradeOrderLog.setStatus(93);
+        //更新用户的使用费用
+        tradeOrderLog.setUsefee(usefee);
+        //更新用户的归还时间
+        tradeOrderLog.setReturnTime(returnDate);
+        //更新订单的归还店铺return_shop_id
+        //当查询出来的shop_station不为null的时候，处理下面的逻辑
+        ShopStation shopStation = this.findShopStationByStationId(returnStation);
+        if (null != shopStation) {
+            Shop shop = shopStation.getShop();
+            tradeOrderLog.setReturnShop(shop);
+            //更新订单的中间表信息return_shop_station_id
+            tradeOrderLog.setReturnShopStation(shopStation);
+            //更新订单表中的return_station_id
+            Station station = shopStation.getStation();
+            tradeOrderLog.setReturnStation(station);
+            //更新订单表中的return_station_name
+            tradeOrderLog.setReturnShopName(shop.getName());
+        }
+        //更新订单信息
+        this.save(tradeOrderLog);
+
+        //判断是哪个平台的订单就调用哪个平台的消息推送service，2为支付宝的订单，3为小程序的订单
+        // 推送归还成功消息
+        String durationString = TimeUtil.timeToString(duration);
+        String useFeeStr = usefee + "元";
+        if (3 == platform) {
+            this.weChatOrderService.sendReturnSuccessMessage(durationString, useFeeStr, tradeOrderLog);
+            return "退部分押金成功";
+        } else if (2 == platform) {
+            //信用借还完结订单
+            alipayOrderService.completeOrder(tradeOrderLog, usefee);
+            // 推送归还成功消息
+            alipayMessageService.sendReturnMessage(durationString, useFeeStr, tradeOrderLog);
+            return "退部分押金成功";
+        }
+        return "退部分押金失败";
     }
 
     /**
-     * 获取accessToken
-     */
-    public String getAccessToken() {
-        String ACCESS_TOKEN = redisService.getKeyValue("ACCESS_TOKEN");
-        if (StringUtils.isEmpty(ACCESS_TOKEN)) {
-            String param = "grant_type=client_credential&appid=" + appID + "&secret=" + appSecret;
-            try {
-                String tokenInfo = HttpRequest.sendGet(GlobalConfig.WX_ACCESS_TOKEN_URL, param);
-                Map<String, Object> tokenInfoMap = JsonUtils.readValue(tokenInfo);
-                String accessToken = tokenInfoMap.get("access_token").toString();
-                Long expiresIn = Long.valueOf(tokenInfoMap.get("expires_in").toString());
-                // 将accessToken存入Redis,存放时间为7200秒
-                redisService.setKeyValueTimeout("ACCESS_TOKEN", accessToken.trim(), expiresIn);
-                return accessToken.trim();
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-                return null;
-            }
-        } else {
-            return ACCESS_TOKEN.trim();
-        }
-    }
-
-    /**
-     * 手动退押金到余额
+     * 用户丢失充电宝
      *
-     * @param ids
+     * @param orderid
+     * @param lostTime
+     * @return
      */
-    public void refundDeposit(Long[] ids) {
-        GroupPropertyFilter groupPropertyFilter = GroupPropertyFilter.buildDefaultAndGroupFilter();
-        groupPropertyFilter.forceAnd(new PropertyFilter(PropertyFilter.MatchType.IN, "id", ids));
-        List<TradeOrderLog> orderLogList = this.findByFilters(groupPropertyFilter);
-
-        if (CollectionUtils.isNotEmpty(orderLogList)) {
-            for (TradeOrderLog order : orderLogList) {
-                String orderid = order.getOrderid();
-                System.out.println("需要退款的订单的编号为：" + orderid);
-                //判断是小程序订单还是支付宝订单,2为支付宝的订单，3为小程序的订单
-                Integer alipayPlatform = 2;
-                Integer weixinPlatform = 3;
-                BizUser bizUser = order.getBizUser();
-                if (alipayPlatform.equals(order.getPlatform())) {
-                    return;
-                } else if (weixinPlatform.equals(order.getPlatform())) {
-                    //退款到用户账户
-                    this.refundWeixinDeposit(bizUser, order);
-                }
-            }
-        }
-    }
-
-    /**
-     * 退押金到用户余额
-     *
-     * @param bizUser 待退款用户
-     * @param order   退款订单
-     */
-    private void refundWeixinDeposit(BizUser bizUser, TradeOrderLog order) {
-        //更新用户可用余额信息
-        //获取用户现在的账户余额
-        BigDecimal usablemoney = bizUser.getUsablemoney();
-        //获取到该笔订单的押金
-        BigDecimal price = order.getPrice();
-        //获取到该笔订单用户消费的金额
-        BigDecimal usefee = order.getUsefee();
-        //用该笔订单的押金减去该笔订单的消费金额，得到应当退还的金额
-        BigDecimal subtract = price.subtract(usefee);
-        //将用户原来的可用余额加上应该退还的金额
-        usablemoney = usablemoney.add(subtract);
-        //更新用户账户信息
-        bizUser.setUsablemoney(usablemoney);
-        bizUserService.save(bizUser);
-        //修改订单状态为   7	'手动退押金'
-        order.setStatus(7);
-        //修改order中的refundedUsable（已退款至可用余额）为原已退款至可用余额加上本次退款金额
-        BigDecimal refundedUsable = order.getRefundedUsable();
-        if (null == refundedUsable) {
-            refundedUsable = subtract;
-        } else {
-            refundedUsable = refundedUsable.add(subtract);
-        }
-        order.setRefundedUsable(refundedUsable);
-        this.save(order);
-        //向用户发送押金退还通知
-        String openid = bizUser.getOpenid();
-
-        Map<String, String> map = new LinkedHashMap<>();
-        //退款原因
-        map.put("keyword1", "手动退押金");
-        //退款时间
+    public String lostPowerBank(String orderid, String lostTime) {
+        TradeOrderLog tradeOrderLog = this.findTradeOrderLogByOrderId(orderid);
+        //更新订单信息
+        tradeOrderLog.setLastModifiedBy("SYS:lostPowerBank");
+        tradeOrderLog.setLastModifiedDate(new Date());
+        //更新订单的状态为92	'租金已扣完(未归还)'
+        tradeOrderLog.setStatus(92);
+        //更新用户的使用费用
+        tradeOrderLog.setUsefee(BigDecimal.valueOf(0));
+        //更新用户的归还时间
+        tradeOrderLog.setReturnTime(new Date());
+        //更新订单信息
+        this.save(tradeOrderLog);
+        //获取到用户丢失时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String requestTime = format.format(new Date());
-        map.put("keyword2", requestTime);
-        //退款金额
-        map.put("keyword3", subtract.toString() + "元");
-        //备注
-        map.put("keyword4", "退款至余额的钱可以在下次充电时使用");
-        this.sendRefundMessage(openid, map);
+        Date lostDate = null;
+        String useFeeStr = "";
+        try {
+            lostDate = format.parse(lostTime);
+            Long now = System.currentTimeMillis();
+            Long use = now - lostDate.getTime();
+            useFeeStr = TimeUtil.timeToString(use);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("解析前端传回的用户归还时间失败！！！");
+        }
+        Integer platform = tradeOrderLog.getPlatform();
+        //判断是哪个平台的订单就调用哪个平台的消息推送service，2为支付宝的订单，3为小程序的订单
+        BigDecimal price = tradeOrderLog.getPrice();
+        if (3 == platform) {
+            BizUser bizUser = tradeOrderLog.getBizUser();
+            // 充电宝丢失，扣除该笔订单全部押金
+            //获取到该笔订单用户的押金
+            BigDecimal paid = price;
+            //获取用户的押金
+            BigDecimal deposit = bizUser.getDeposit();
+            //用户的押金减掉该笔订单支付的金额
+            BigDecimal subtract = deposit.subtract(paid);
+            bizUser.setDeposit(subtract);
+            //更新用户信息
+            bizUser.setLastModifiedBy("SYS:return_back");
+            bizUser.setLastModifiedDate(new Date());
+            bizUserService.save(bizUser);
+            // 推送归还成功消息
+            weChatOrderService.sendReturnSuccessMessage(useFeeStr, paid + "元", tradeOrderLog);
+            return "丢失充电宝处理成功";
+        } else if (2 == platform) {
+            //完结信用借还订单，费用为0
+            alipayOrderService.completeOrder(tradeOrderLog, price);
+            //发送订单完结的消息
+            alipayMessageService.sendReturnMessage(useFeeStr, price.toString(), tradeOrderLog);
+            return "丢失充电宝处理成功";
+        }
+        return "丢失充电宝处理失败";
+    }
+
+    /**
+     * 手动退还多收的钱
+     *
+     * @param orderid
+     * @param extraMoney
+     * @return
+     */
+    public String refundExtraMoney(String orderid, String extraMoney) {
+        TradeOrderLog tradeOrderLog = this.findTradeOrderLogByOrderId(orderid);
+        //获取到用户的使用费用
+        BigDecimal usefee = tradeOrderLog.getUsefee();
+        //订单中用户的使用费用减去退还的费用
+        Double extraMoneyDouble = Double.parseDouble(extraMoney);
+        BigDecimal extraMoneyBigDecimal = BigDecimal.valueOf(extraMoneyDouble);
+        BigDecimal subtract = usefee.subtract(extraMoneyBigDecimal);
+        //修改订单中用户的使用费用
+        tradeOrderLog.setUsefee(subtract);
+
+        Integer platform = tradeOrderLog.getPlatform();
+        //判断是哪个平台的订单就怎样处理业务逻辑，2为支付宝的订单，3为小程序的订单
+        BigDecimal price = tradeOrderLog.getPrice();
+        if (3 == platform) {
+            BizUser bizUser = tradeOrderLog.getBizUser();
+            //获取用户的可用余额
+            BigDecimal usablemoney = bizUser.getUsablemoney();
+            //用户的可用余额加上退款的金额
+            BigDecimal add = usablemoney.add(extraMoneyBigDecimal);
+            //更改用户的余额
+            bizUser.setUsablemoney(add);
+            //更新用户信息
+            this.bizUserService.save(bizUser);
+
+            return "手动退押金成功";
+        } else if (2 == platform) {
+            //因为已经在外部退款给用户，这里没有业务逻辑
+            return "手动退押金成功";
+        }
+        return "手动退押金失败";
     }
 }

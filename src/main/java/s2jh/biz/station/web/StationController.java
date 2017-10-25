@@ -83,7 +83,8 @@ public class StationController extends BaseController<Station, Long> {
      */
     @RequestMapping(value = "/alterIpAndPort", method = RequestMethod.POST)
     @ResponseBody
-    public void alterIpAndPort(@RequestParam("ids") Long... ids) {
+    public String alterIpAndPort(@RequestParam("ids") Long... ids) {
         this.stationService.alterIpAndPort(ids);
+        return "修改成功";
     }
 }
