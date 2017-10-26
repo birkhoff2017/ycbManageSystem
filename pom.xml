@@ -24,7 +24,7 @@
         <spymemcached.version>2.8.9</spymemcached.version>
         <hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
         <jolokia.version>1.0.6</jolokia.version>
-        <jackson.version>2.4.5</jackson.version>
+        <jackson.version>2.8.3</jackson.version>
         <slf4j.version>1.7.7</slf4j.version>
         <commons-lang3.version>3.1</commons-lang3.version>
         <commons-io.version>2.4</commons-io.version>
@@ -389,6 +389,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
         <!-- JSON end -->

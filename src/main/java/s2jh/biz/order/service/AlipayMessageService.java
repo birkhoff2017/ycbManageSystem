@@ -65,8 +65,12 @@ public class AlipayMessageService {
         String keyword2Color = "#000000";
         // 归还时间
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String keyword2Value = sdf.format(new Date());
-
+        String keyword2Value = "";
+        try {
+            keyword2Value = sdf.format(order.getReturnTime());
+        }catch (Exception e){
+            keyword2Value = sdf.format(new Date());
+        }
         //租用时长
         //keyword3
         String keyword3Color = "#000000";

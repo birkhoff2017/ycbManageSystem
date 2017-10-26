@@ -32,7 +32,7 @@ public class AlipayOrderService {
      * @param order 订单
      * @param usefee
      */
-    public boolean completeOrder(TradeOrderLog order, BigDecimal usefee) {
+    public boolean completeOrder(TradeOrderLog order, BigDecimal usefee,String payAmountType) {
         AlipayClient alipayClient = new DefaultAlipayClient(GlobalConfig.ALIPAY_SERVER_URL, GlobalConfig.ALIPAY_APP_ID, GlobalConfig.ALIPAY_PRIVATE_KEY, GlobalConfig.ALIPAY_FORMAT, GlobalConfig.ALIPAY_CHARSET, GlobalConfig.ALIPAY_ALIPAYPUBLIC_KEY, GlobalConfig.ALIPAY_SIGNTYPE);
         ZhimaMerchantOrderRentCompleteRequest request = new ZhimaMerchantOrderRentCompleteRequest();
         //获得信用借还订单支付宝的订单编号
@@ -44,15 +44,11 @@ public class AlipayOrderService {
         }catch (Exception e){
             restoreTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         }
-        /*
-        金额类型：
-        RENT:租金
-         */
-        String payAmountType = "RENT";
+        //String payAmountType = "RENT";
         //payAmount 需要支付的金额
         String payAmount = usefee.toString();
         //restoreShopName 物品归还门店名称
-        String restoreShopName = order.getBorrowShopName();
+        String restoreShopName = order.getReturnShopName();
 
         Map<String, Object> bizContentMap = new LinkedHashMap<>();
         bizContentMap.put("order_no", orderNo);

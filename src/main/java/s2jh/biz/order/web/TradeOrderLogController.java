@@ -145,6 +145,12 @@ public class TradeOrderLogController extends BaseController<TradeOrderLog, Long>
         return this.tradeOrderLogService.lostPowerBank(orderid, lostTime);
     }
 
+    /**
+     * 处理订单完结，多收用户钱的情况下，进行退款的情况
+     * @param orderid   订单编号
+     * @param extraMoney    需要退款的金额
+     * @return
+     */
     @RequestMapping(value = "/refundExtraMoney", method = RequestMethod.POST)
     @ResponseBody
     public String refundExtraMoney(@RequestParam("order_id") String orderid, @RequestParam("extra_money") String extraMoney) {

@@ -148,7 +148,7 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
             return "取消订单成功";
         } else if (2 == platform) {
             //完结信用借还订单，费用为0
-            alipayOrderService.completeOrder(tradeOrderLog, BigDecimal.valueOf(0));
+            alipayOrderService.completeOrder(tradeOrderLog, BigDecimal.valueOf(0),"RENT");
             //发送订单完结的消息
             alipayMessageService.sendReturnMessage("0秒", "0", tradeOrderLog);
             return "取消订单成功";
@@ -280,7 +280,7 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
             return "全额退押金成功";
         } else if (2 == platform) {
             //完结信用借还订单，费用为0
-            alipayOrderService.completeOrder(tradeOrderLog, BigDecimal.valueOf(0));
+            alipayOrderService.completeOrder(tradeOrderLog, BigDecimal.valueOf(0),"RENT");
             //发送订单完结的消息
             alipayMessageService.sendReturnMessage("0秒", "0", tradeOrderLog);
             return "全额退押金成功";
@@ -415,7 +415,7 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
             return "退部分押金成功";
         } else if (2 == platform) {
             //信用借还完结订单
-            alipayOrderService.completeOrder(tradeOrderLog, usefee);
+            alipayOrderService.completeOrder(tradeOrderLog, usefee,"RENT");
             // 推送归还成功消息
             alipayMessageService.sendReturnMessage(durationString, useFeeStr, tradeOrderLog);
             return "退部分押金成功";
@@ -437,28 +437,28 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
         tradeOrderLog.setLastModifiedDate(new Date());
         //更新订单的状态为92	'租金已扣完(未归还)'
         tradeOrderLog.setStatus(92);
-        //更新用户的使用费用
-        tradeOrderLog.setUsefee(BigDecimal.valueOf(0));
-        //更新用户的归还时间
-        tradeOrderLog.setReturnTime(new Date());
+        //更新用户的使用费用，为该笔订单的押金
+        //获取该笔订单的押金
+        BigDecimal price = tradeOrderLog.getPrice();
+        //将该笔订单的使用费用修改为押金，即使用费用为全部押金
+        tradeOrderLog.setUsefee(price);
         //更新订单信息
         this.save(tradeOrderLog);
         //获取到用户丢失时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date lostDate = null;
-        String useFeeStr = "";
+        //获取到用户的租借时间
+        Date borrowTime = tradeOrderLog.getBorrowTime();
+        String useTime = "";
         try {
-            lostDate = format.parse(lostTime);
-            Long now = System.currentTimeMillis();
-            Long use = now - lostDate.getTime();
-            useFeeStr = TimeUtil.timeToString(use);
+            Date lostDate = format.parse(lostTime);
+            Long use = (lostDate.getTime() - borrowTime.getTime())/1000;
+            useTime = TimeUtil.timeToString(use);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("解析前端传回的用户归还时间失败！！！");
         }
         Integer platform = tradeOrderLog.getPlatform();
         //判断是哪个平台的订单就调用哪个平台的消息推送service，2为支付宝的订单，3为小程序的订单
-        BigDecimal price = tradeOrderLog.getPrice();
         if (3 == platform) {
             BizUser bizUser = tradeOrderLog.getBizUser();
             // 充电宝丢失，扣除该笔订单全部押金
@@ -474,13 +474,13 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
             bizUser.setLastModifiedDate(new Date());
             bizUserService.save(bizUser);
             // 推送归还成功消息
-            weChatOrderService.sendReturnSuccessMessage(useFeeStr, paid + "元", tradeOrderLog);
+            weChatOrderService.sendReturnSuccessMessage(useTime, paid + "元", tradeOrderLog);
             return "丢失充电宝处理成功";
         } else if (2 == platform) {
             //完结信用借还订单，费用为0
-            alipayOrderService.completeOrder(tradeOrderLog, price);
+            alipayOrderService.completeOrder(tradeOrderLog, price,"DAMAGE");
             //发送订单完结的消息
-            alipayMessageService.sendReturnMessage(useFeeStr, price.toString(), tradeOrderLog);
+            alipayMessageService.sendReturnMessage(useTime, price.toString(), tradeOrderLog);
             return "丢失充电宝处理成功";
         }
         return "丢失充电宝处理失败";
@@ -503,6 +503,14 @@ public class TradeOrderLogService extends BaseService<TradeOrderLog, Long> {
         BigDecimal subtract = usefee.subtract(extraMoneyBigDecimal);
         //修改订单中用户的使用费用
         tradeOrderLog.setUsefee(subtract);
+        //获取到该笔订单的refundedUsable已退款至可用余额
+        BigDecimal refundedUsable = tradeOrderLog.getRefundedUsable();
+        //原 已退款至可用余额 加上这次退款到可用余额的金额
+        BigDecimal add1 = refundedUsable.add(extraMoneyBigDecimal);
+        //修改订单中的 已退款余额
+        tradeOrderLog.setRefundedUsable(add1);
+        //保存修改后的订单
+        this.save(tradeOrderLog);
 
         Integer platform = tradeOrderLog.getPlatform();
         //判断是哪个平台的订单就怎样处理业务逻辑，2为支付宝的订单，3为小程序的订单
